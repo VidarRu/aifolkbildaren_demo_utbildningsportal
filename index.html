@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI i folkbibliotekets praktik – AI Folkbildaren (demo)</title>
+<meta name="description" content="Demoversion av en resurssida för en utbildningsserie.">
+<meta property="og:title" content="AI i folkbibliotekets praktik (demo)">
+<meta property="og:description" content="Demoversion.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#2c6249">
+<meta name="robots" content="noindex, nofollow">
+<script>
+  document.documentElement.classList.add('js');
+  try {
+    var t = localStorage.getItem('theme'); if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+    if (localStorage.getItem('aifp-demo-gate') === '2a97516c354b') document.documentElement.classList.add('unlocked');
+  } catch (e) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=demo1">
+<link rel="preload" as="image" href="assets/img/bokhylla.jpg">
+</head>
+<body>
+
+<!-- Medaljen som delas ut när alla uppgifter är gjorda (används i menyn och i grattisrutan) -->
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="medalj-kant" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3cf63"/><stop offset="1" stop-color="#9a6a12"/></lineargradient>
+    <radialGradient id="medalj-yta" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3c2"/><stop offset=".45" stop-color="#f2c14e"/><stop offset="1" stop-color="#c38c1b"/></radialgradient>
+    <symbol id="medalj" viewBox="0 0 160 200">
+      <path d="M44 0h30l28 94H72z" fill="#2a6b70"/>
+      <path d="M86 0h30L88 94H58z" fill="#8a3b46"/>
+      <path d="M53 0h5l28 94h-5zM102 0h5L79 94h-5z" fill="#fff" opacity=".28"/>
+      <rect x="56" y="84" width="48" height="16" rx="4" fill="url(#medalj-kant)"/>
+      <circle cx="80" cy="140" r="58" fill="url(#medalj-kant)"/>
+      <circle cx="80" cy="140" r="47" fill="url(#medalj-yta)" stroke="#fff6d0" stroke-opacity=".75" stroke-width="2"/>
+      <path d="M80.0 114.0 L86.5 131.1 L104.7 132.0 L90.5 143.4 L95.3 161.0 L80.0 151.0 L64.7 161.0 L69.5 143.4 L55.3 132.0 L73.5 131.1Z" fill="#a8740f" stroke="#fff3c2" stroke-width="1.5" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ═══════════════ STARTSIDA MED LÖSENORD ═══════════════ -->
+<div class="gate shelf-bg" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+  <audio id="gate-audio" src="assets/audio/startsida.mp3" preload="none" loop></audio>
+  <button class="gate-sound" type="button" aria-pressed="true" aria-label="Stäng av musiken">
+    <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+    <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>
+    <span class="gate-sound-label">Musik</span>
+  </button>
+  <div class="gate-panel frost">
+    <div class="gate-terminal" aria-hidden="true">
+      <div class="gate-dots"><i></i><i></i><i></i><span>ai-folkbildaren — laddar</span></div>
+      <pre class="gate-log"></pre>
+      <div class="gate-meter"><div class="gate-bar"><span></span></div><div class="gate-pct">0%</div></div>
+    </div>
+    <div class="gate-main">
+      <span class="pill">AI Folkbildaren · Utbildningsserie i tre delar</span>
+      <div class="gate-title" id="gate-title" role="heading" aria-level="1">AI i <em>folkbibliotekets praktik</em></div>
+      <p class="gate-notice"><strong>© lorem ipsum dolor.</strong> Sit amet consectetur adipiscing elit sed do eiusmod tempor. Incididunt ut labore et dolore magna aliqua ut enim ad minim veniam. Quis nostrud exercitation ullamco laboris nisi ut. Aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit. In voluptate velit esse cillum.</p>
+      <form class="gate-form" autocomplete="on">
+        <label for="gate-pw">Lösenord</label>
+        <div class="gate-row">
+          <input id="gate-pw" name="password" type="password" autocomplete="current-password" required>
+          <button class="btn primary" type="submit">Gå in <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+        </div>
+        <p class="gate-hint">Demoversion · lösenord: <code>demo</code></p>
+        <p class="gate-error" role="alert" hidden>Fel lösenord – försök igen.</p>
+        <noscript><p class="gate-error">Sidan behöver JavaScript för att kunna öppnas. Slå på JavaScript i webbläsaren och ladda om sidan.</p></noscript>
+      </form>
+    </div>
+  </div>
+</div>
+
+<a class="skip-link" href="#om">Hoppa till innehållet</a>
+<div class="progress" aria-hidden="true"></div>
+
+<header class="topnav" id="top">
+  <div class="topnav-inner">
+    <a class="brand" href="#top" aria-label="AI i folkbibliotekets praktik – till toppen">
+      <span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span>
+      <span class="brand-text">AI-Folkbildaren</span>
+    </a>
+    <nav class="navlinks" aria-label="Delar på sidan">
+      <a href="#om">Om kursen</a>
+      <a href="#del1">Del 1</a>
+      <a href="#del2">Del 2</a>
+      <a href="#del3">Del 3</a>
+      <a href="#bonus">Bonus</a>
+      <a href="#resurser">Resurser</a>
+    </nav>
+    <div class="nav-progress" title="Andel genomförda workshopövningar och hemuppgifter">
+      <span class="np-label" id="np-label">Progression</span>
+      <span class="np-bar" role="progressbar" aria-labelledby="np-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="--p: 0"><span></span></span>
+      <span class="np-pct" aria-hidden="true">0 %</span>
+      <button class="np-medal" type="button" data-medal-open hidden aria-label="Visa medaljen Fullfjädrad AI-folkbildare"><svg viewBox="0 0 160 200" aria-hidden="true"><use href="#medalj"/></svg></button>
+    </div>
+    <button class="theme-toggle" type="button" aria-label="Växla mellan ljust och mörkt läge">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════ SIDHUVUD ═══════════════ -->
+<section class="hero shelf-bg" aria-labelledby="sidtitel">
+  <div class="hero-panel frost" data-reveal="scale">
+    <div>
+      <span class="pill">AI Folkbildaren · Utbildningsserie i tre delar</span>
+      <h1 id="sidtitel">AI i <em>folkbibliotekets praktik</em></h1>
+      <p class="hero-ingress">Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat. Non proident sunt in culpa qui officia deserunt mollit anim id est. Laborum curabitur pretium tincidunt lacus.</p>
+      <div class="hero-text">
+        <p>Nulla gravida orci a odio nullam varius turpis et. Commodo pharetra est eros bibendum elit nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula donec lobortis risus a elit etiam.</p>
+        <p>Tempor ut ullamcorper ligula eu tempor congue eros.</p>
+      </div>
+      <div class="btn-row">
+        <a class="btn primary" href="#om">Kom igång <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a class="btn" href="#material">Allt material samlat</a>
+      </div>
+    </div>
+    <div class="bookshelf" aria-label="De tre delarna">
+      <a class="book" href="#del1" style="--bc: #2a6b70">
+        <span class="book-spine" aria-hidden="true"><span>Del 1 · Generativ AI</span></span>
+        <span class="book-pages" aria-hidden="true"></span>
+        <span class="book-cover">
+          <span class="bk-n">Del 1</span>
+          <span class="bk-t">Praktisk introduktion till <em>generativ AI</em></span>
+          <img src="assets/img/omslag-del1.jpg" alt="" width="720" height="405">
+        </span>
+      </a>
+      <a class="book" href="#del2" style="--bc: #8a3b46">
+        <span class="book-spine" aria-hidden="true"><span>Del 2 · Informationssökning</span></span>
+        <span class="book-pages" aria-hidden="true"></span>
+        <span class="book-cover">
+          <span class="bk-n">Del 2</span>
+          <span class="bk-t">Informations&shy;sökning och <em>AI</em></span>
+          <img src="assets/img/omslag-del2.jpg" alt="" width="720" height="405">
+        </span>
+      </a>
+      <a class="book" href="#del3" style="--bc: #7a6420">
+        <span class="book-spine" aria-hidden="true"><span>Del 3 · Informationshantering</span></span>
+        <span class="book-pages" aria-hidden="true"></span>
+        <span class="book-cover">
+          <span class="bk-n">Del 3</span>
+          <span class="bk-t">AI och <em>informations&shy;hantering</em></span>
+          <img src="assets/img/omslag-del3.jpg" alt="" width="720" height="405">
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <nav class="toc stagger" aria-label="Innehåll">
+    <a href="#om" data-part="om"><span class="toc-num">Om kursen</span><span class="toc-title">Ett ämne vi inte kan strunta i</span><span class="toc-desc">Est euismod turpis id tincidunt sapien risus a quam. Maecenas fermentum consequat mi donec fermentum pellentesque.</span></a>
+    <a href="#del1" data-part="del1"><span class="toc-num">Del 1</span><span class="toc-title">Praktisk introduktion till generativ AI</span><span class="toc-desc">Malesuada nulla a mi duis</span></a>
+    <a href="#del2" data-part="del2"><span class="toc-num">Del 2</span><span class="toc-title">Informations&shy;sökning och AI</span><span class="toc-desc">Sapien sem aliquet nec commodo</span></a>
+    <a href="#del3" data-part="del3"><span class="toc-num">Del 3</span><span class="toc-title">AI och informations&shy;hantering</span><span class="toc-desc">Eget consequat quis neque aliquam faucibus lorem.</span></a>
+    <a href="#bonus" data-part="bonus"><span class="toc-num">Bonus</span><span class="toc-title">Program&shy;verksamhet</span><span class="toc-desc">Ipsum dolor sit amet</span></a>
+    <a href="#resurser" data-part="res"><span class="toc-num">Resurser</span><span class="toc-title">Resurser</span><span class="toc-desc">Consectetur adipiscing elit sed do</span></a>
+  </nav>
+</section>
+
+<main>
+
+<!-- ═══════════════ OM KURSEN ═══════════════ -->
+<section class="part" id="om" data-part="om" aria-labelledby="om-titel">
+  <div class="part-band shelf-bg">
+    <header class="part-head frost">
+      <div>
+        <span class="pill">Om kursen</span>
+        <h2 class="part-title" id="om-titel">Ett ämne vi <em>inte kan strunta i</em></h2>
+        <p class="part-ingress">Eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.</p>
+      </div>
+      <div class="part-num" aria-hidden="true">00</div>
+    </header>
+  </div>
+  <div class="part-body">
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Upplägg</div>
+        <h3 class="block-title">Så är serien upplagd</h3>
+      </div></div>
+      <div class="block-body">
+        <p class="prose" data-reveal="up">Ad minim veniam quis nostrud exercitation ullamco laboris nisi. Ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit. In voluptate velit esse cillum dolore eu. Fugiat nulla pariatur excepteur sint.</p>
+        <div class="grid grid-3 stagger">
+          <a class="card feature" href="#del1" style="--part: var(--c-del1); text-decoration: none; color: inherit;">
+            <span class="icon-box" aria-hidden="true"><b>1</b></span>
+            <h4>Del 1, praktisk introduktion</h4>
+            <p>Occaecat cupidatat non proident sunt in culpa qui officia. Deserunt mollit anim id est laborum curabitur pretium tincidunt lacus nulla gravida. Orci a odio nullam varius turpis.</p>
+          </a>
+          <a class="card feature" href="#del2" style="--part: var(--c-del2); text-decoration: none; color: inherit;">
+            <span class="icon-box" aria-hidden="true"><b>2</b></span>
+            <h4>Del 2, informationssökning och AI</h4>
+            <p>Et commodo pharetra est eros bibendum elit nec luctus. Magna felis sollicitudin mauris integer in mauris eu nibh.</p>
+          </a>
+          <a class="card feature" href="#del3" style="--part: var(--c-del3); text-decoration: none; color: inherit;">
+            <span class="icon-box" aria-hidden="true"><b>3</b></span>
+            <h4>Del 3, AI och informationshantering</h4>
+            <p>Euismod gravida duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit etiam tempor ut ullamcorper ligula eu tempor congue.</p>
+          </a>
+        </div>
+        <p class="prose muted" data-reveal="up">Eros est euismod turpis id tincidunt sapien risus a. Quam maecenas fermentum consequat mi donec fermentum pellentesque malesuada nulla a mi duis sapien (<a href="#kontakt">sem aliquet nec</a>).</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Principer</div>
+        <h3 class="block-title">Sex saker att ta med dig</h3>
+        <p>Commodo eget consequat quis neque aliquam faucibus lorem ipsum.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="grid grid-3 acc-grid stagger">
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🎲</span><span class="acc-head"><span class="acc-title">Sannolikt är inte samma sak som sant</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Dolor sit amet consectetur adipiscing elit sed do eiusmod. Tempor incididunt ut labore.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🗣️</span><span class="acc-head"><span class="acc-title">Säg vad du vill ha</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Et dolore magna aliqua ut enim ad minim veniam. Quis nostrud exercitation ullamco laboris nisi.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🔍</span><span class="acc-head"><span class="acc-title">Dubbelkolla det du ska använda till något</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Ut aliquip ex ea commodo consequat duis aute irure. Dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla. Pariatur excepteur sint occaecat cupidatat non proident. Sunt in culpa qui officia deserunt mollit anim id est.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🔒</span><span class="acc-head"><span class="acc-title">Tänk efter innan du laddar upp</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Laborum curabitur pretium tincidunt lacus nulla gravida orci a. Odio nullam varius turpis et commodo pharetra est eros bibendum elit nec. Luctus magna felis.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🙋</span><span class="acc-head"><span class="acc-title">Du behöver inte, men det är bra att kunna</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Sollicitudin mauris integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula donec lobortis risus a elit etiam.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🪜</span><span class="acc-head"><span class="acc-title">Ribban är låg</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Tempor ut ullamcorper ligula eu tempor congue eros est. Euismod turpis id tincidunt sapien risus a quam maecenas fermentum consequat mi. Donec fermentum pellentesque malesuada nulla a mi. Duis sapien sem aliquet nec commodo eget.</p></div></div></div></div>
+          </div>
+      </div>
+    </div>
+
+    <div class="part-foot"><a class="to-top" href="#top">↑ Tillbaka till toppen</a></div>
+  </div>
+</section>
+
+<!-- ═══════════════ DEL 1 ═══════════════ -->
+<section class="part" id="del1" data-part="del1" aria-labelledby="del1-titel">
+  <div class="part-band shelf-bg">
+    <header class="part-head frost">
+      <div>
+        <span class="pill">Del 1 · Tillfälle 1</span>
+        <h2 class="part-title" id="del1-titel">Praktisk introduktion till <em>generativ AI</em></h2>
+        <p class="part-ingress">Consequat quis neque aliquam faucibus lorem ipsum dolor sit. Amet consectetur adipiscing elit sed do eiusmod tempor incididunt.</p>
+      </div>
+      <div class="part-num" aria-hidden="true">01</div>
+    </header>
+  </div>
+  <div class="part-body">
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Från tillfället</div>
+        <h3 class="block-title">Presentation och inspelning</h3>
+        <p>Ut labore et dolore magna aliqua ut enim ad. Minim veniam quis.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="material stagger">
+          <a class="mat-card" href="assets/img/omslag-del1.jpg" data-lightbox data-full="assets/img/omslag-del1.jpg" data-title="Presentation, del 1 (platshållare)">
+            <div class="mat-media"><img src="assets/img/omslag-del1.jpg" alt="Titelbild ur presentationen för Del 1" loading="lazy" width="720" height="405"></div>
+            <div class="mat-body">
+              <div><div class="mat-kind">Presentation</div><div class="mat-title">Presentationen från tillfället</div><div class="mat-meta">Bild · platshållare</div></div>
+              <span class="mat-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg></span>
+            </div>
+          </a>
+          <div class="mat-card">
+            <div class="video" data-src="assets/video/demo.mp4">
+              <button type="button" aria-label="Spela upp inspelningen från Tillfälle 1"><img src="assets/img/video-poster.jpg" alt="" loading="lazy"><span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
+            </div>
+            <div class="mat-body">
+              <div><div class="mat-kind">Inspelning</div><div class="mat-title">Tillfälle 1 i sin helhet</div><div class="mat-meta">Video · <a href="assets/video/demo.mp4" target="_blank" rel="noopener">öppna i ny flik</a></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Ordlista</div>
+        <h3 class="block-title">Begrepp</h3>
+      </div></div>
+      <div class="block-body">
+        <dl class="grid grid-4 stagger">
+          <div class="card term" data-glyph="G"><dt>Generativ AI</dt><dd>Nostrud exercitation ullamco laboris nisi ut aliquip ex ea. Commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse. Cillum dolore eu fugiat nulla pariatur excepteur. Sint occaecat cupidatat.</dd></div>
+          <div class="card term" data-glyph="L"><dt>LLM / språkmodell</dt><dd>Non proident sunt in culpa qui officia deserunt mollit. Anim id est laborum curabitur pretium.</dd></div>
+          <div class="card term" data-glyph="P"><dt>Prompt</dt><dd>Tincidunt lacus nulla gravida orci a odio nullam varius. Turpis et commodo.</dd></div>
+          <div class="card term" data-glyph="H"><dt>Hallucination</dt><dd>Pharetra est eros bibendum elit nec luctus magna felis. Sollicitudin mauris integer in.</dd></div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Teori</div>
+        <h3 class="block-title">Så funkar generativ AI</h3>
+        <p>Mauris eu nibh euismod gravida duis ac tellus et. Risus vulputate vehicula donec lobortis risus.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="grid grid-3 acc-grid stagger">
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">01</span><span class="acc-head"><span class="acc-title">Inget vanligt program</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>A elit etiam tempor ut ullamcorper ligula eu tempor. Congue eros est euismod turpis id tincidunt sapien risus a quam maecenas. Fermentum consequat mi donec fermentum pellentesque malesuada. Nulla a mi duis sapien sem.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">02</span><span class="acc-head"><span class="acc-title">Språkmodeller lär sig mönster</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Aliquet nec commodo eget consequat quis neque aliquam faucibus. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor. Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi. Ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in. Voluptate velit esse cillum dolore eu fugiat nulla. Pariatur excepteur sint.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">03</span><span class="acc-head"><span class="acc-title">Transformer-genombrottet</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Occaecat cupidatat non proident sunt in culpa qui officia. Deserunt mollit anim id est laborum curabitur pretium tincidunt lacus nulla gravida. Orci a odio nullam varius turpis et. Commodo pharetra est eros bibendum elit nec luctus magna felis sollicitudin. Mauris integer in mauris eu nibh euismod gravida duis ac tellus et risus. Vulputate vehicula donec lobortis risus a elit etiam. Tempor ut ullamcorper ligula eu tempor congue eros est euismod. Turpis id tincidunt sapien risus a quam maecenas fermentum.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">04</span><span class="acc-head"><span class="acc-title">Hallucinationer</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Consequat mi donec fermentum pellentesque malesuada nulla a mi. Duis sapien sem aliquet nec commodo eget consequat quis neque aliquam faucibus. Lorem ipsum dolor sit amet consectetur adipiscing. Elit sed do eiusmod tempor incididunt ut labore et dolore magna. Aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut. Aliquip ex ea commodo consequat duis aute irure. Dolor in reprehenderit in.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">05</span><span class="acc-head"><span class="acc-title">Bra och mindre bra på</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt. Mollit anim id est laborum curabitur pretium. Tincidunt lacus nulla gravida orci a odio nullam varius.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">06</span><span class="acc-head"><span class="acc-title">Två sätt att prompta</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Turpis et commodo pharetra est eros bibendum elit nec. Luctus magna felis sollicitudin mauris integer.</p><p><strong>In:</strong> mauris eu nibh euismod gravida duis ac tellus et. Risus vulputate vehicula donec lobortis risus a elit etiam tempor ut ullamcorper ligula eu.</p><p><strong>Tempor:</strong> congue eros est euismod turpis id tincidunt sapien risus. A quam maecenas fermentum consequat mi.</p><p>Donec fermentum pellentesque malesuada nulla a mi duis sapien. Sem aliquet nec commodo eget consequat quis neque.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">07</span><span class="acc-head"><span class="acc-title">Vill du fördjupa dig?</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Aliquam faucibus lorem ipsum dolor? <a href="https://course.elementsofai.com/se/" target="_blank" rel="noopener">Sit amet consectetur</a> adipiscing elit sed do eiusmod tempor incididunt ut.</p></div></div></div></div>
+          </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Demonstrationer</div>
+        <h3 class="block-title">Det här kan du använda Copilot till</h3>
+        <p>Labore et dolore magna aliqua ut enim ad minim. Veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo. Consequat duis aute irure dolor.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="grid grid-3 acc-grid stagger">
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">📚</span><span class="acc-head"><span class="acc-title">Bokrekommendationer</span><span class="acc-desc">In reprehenderit</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+              <p>In voluptate velit esse cillum dolore eu fugiat nulla. Pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia. Deserunt mollit anim id est laborum curabitur. Pretium tincidunt lacus nulla gravida orci a odio nullam varius turpis. Et commodo pharetra est eros bibendum elit nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida duis. Ac tellus et risus vulputate vehicula donec lobortis risus a. Elit etiam tempor ut?</p>
+              <p>Ullamcorper ligula eu tempor congue eros est euismod turpis. Id tincidunt sapien risus.</p>
+              <p>A quam maecenas fermentum consequat mi donec fermentum pellentesque. Malesuada nulla a mi duis sapien sem aliquet nec commodo eget consequat. Quis neque aliquam faucibus lorem ipsum dolor.</p>
+            </div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">✍️</span><span class="acc-head"><span class="acc-title">Textproduktion</span><span class="acc-desc">Sit amet consectetur adipiscing elit</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+              <p>Sed do eiusmod tempor incididunt ut labore et dolore. Magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris. Nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum. Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in. Culpa qui officia deserunt mollit anim id est. Laborum curabitur pretium tincidunt lacus nulla gravida orci a odio. Nullam varius turpis et commodo pharetra est eros bibendum. Elit nec luctus magna felis.</p>
+              <p>Sollicitudin mauris integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula donec lobortis risus a elit. Etiam tempor ut ullamcorper ligula eu tempor. Congue eros est euismod turpis id tincidunt sapien risus a quam. Maecenas fermentum consequat mi donec fermentum pellentesque malesuada nulla a mi duis sapien. Sem aliquet nec commodo eget consequat quis neque aliquam. <a href="#del3">Faucibus lorem</a>.</p>
+            </div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">📊</span><span class="acc-head"><span class="acc-title">Statistik</span><span class="acc-desc">Ipsum dolor sit amet consectetur adipiscing elit.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+              <p>Sed do eiusmod tempor incididunt ut labore et dolore. Magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris. Nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum. Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in. Culpa qui officia deserunt mollit anim:</p>
+              <p class="prompt"><span class="prompt-label">Promptexempel</span>”Id est laborum curabitur pretium tincidunt lacus nulla gravida. Orci a odio nullam varius turpis et commodo pharetra est eros bibendum. Elit nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida duis ac tellus et. Risus vulputate vehicula donec lobortis risus a elit etiam tempor ut ullamcorper ligula. Eu tempor congue.”</p>
+              <p>Eros est euismod turpis id tincidunt sapien risus a. Quam maecenas fermentum consequat mi donec fermentum pellentesque malesuada nulla a mi. Duis sapien sem aliquet nec commodo eget. Consequat quis neque aliquam faucibus lorem ipsum dolor sit amet consectetur. Adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation. Ullamco laboris nisi ut aliquip ex ea commodo consequat duis. Aute irure dolor in reprehenderit in voluptate velit esse. Cillum dolore eu fugiat nulla pariatur excepteur.</p>
+            </div></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Spara tid</div>
+        <h3 class="block-title">Agenter, projekt och minne</h3>
+        <p>Sint occaecat cupidatat non proident sunt in culpa qui. Officia deserunt mollit anim id est laborum curabitur pretium tincidunt lacus nulla. Gravida orci a odio nullam varius turpis.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="grid grid-2 acc-grid stagger">
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🤖</span><span class="acc-head"><span class="acc-title">Agenter i Copilot</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content"><p>Et commodo pharetra est eros bibendum elit nec luctus. Magna felis sollicitudin mauris integer in mauris eu nibh euismod gravida duis. Ac tellus et risus vulputate vehicula donec. Lobortis risus a elit etiam tempor ut ullamcorper ligula eu tempor. Congue eros est euismod turpis id tincidunt sapien risus a quam maecenas fermentum. Consequat mi donec fermentum pellentesque malesuada nulla a. Mi duis sapien sem aliquet nec commodo eget consequat quis.</p></div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">⚠️</span><span class="acc-head"><span class="acc-title">En begränsning att känna till</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content"><p>Neque aliquam faucibus lorem ipsum dolor sit amet consectetur. Adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna. Aliqua ut enim ad minim veniam quis. Nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</p></div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🗂️</span><span class="acc-head"><span class="acc-title">Projekt i andra tjänster</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content"><p>Consequat duis aute irure dolor in reprehenderit in voluptate. Velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat. Non proident sunt in culpa qui officia. Deserunt mollit anim id est laborum curabitur pretium tincidunt lacus nulla. Gravida orci a odio nullam varius turpis et commodo pharetra est eros.</p></div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">👑</span><span class="acc-head"><span class="acc-title">Personliga inställningar och minne</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content"><p>Bibendum elit nec luctus magna felis sollicitudin mauris integer. In mauris eu nibh euismod gravida duis ac tellus et risus vulputate. Vehicula donec lobortis risus a elit etiam. Tempor ut ullamcorper ligula eu tempor congue eros est euismod turpis. Id tincidunt sapien risus a quam maecenas fermentum consequat mi donec fermentum pellentesque. Malesuada nulla a mi duis sapien sem aliquet. Nec commodo eget consequat quis neque aliquam faucibus lorem ipsum.</p><p>Dolor sit amet consectetur adipiscing elit sed do eiusmod. Tempor incididunt ut labore et dolore magna aliqua ut enim ad minim. Veniam quis nostrud exercitation ullamco laboris nisi. Ut aliquip ex ea commodo consequat duis aute irure dolor in. Reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat.</p></div></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Workshops</div>
+        <h3 class="block-title">Gör om dem med kollegor</h3>
+        <p>Non proident sunt in culpa qui officia deserunt mollit. Anim id est laborum curabitur pretium tincidunt lacus nulla gravida orci a. Odio nullam varius turpis et.</p>
+      </div></div>
+      <div class="block-body stagger">
+        <div class="acc" id="d1-bokjakten" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">01</span><span class="acc-head"><span class="acc-title">Bokjakten</span><span class="acc-desc">Commodo pharetra est eros bibendum elit nec luctus magna. Felis sollicitudin mauris integer in.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+            <p>Mauris eu nibh euismod gravida duis ac tellus et. Risus vulputate vehicula donec lobortis risus a elit etiam tempor ut ullamcorper. Ligula eu tempor congue eros est euismod. Turpis id tincidunt sapien risus a quam maecenas fermentum consequat mi. Donec fermentum pellentesque malesuada nulla a mi duis sapien sem aliquet nec commodo. Eget consequat quis neque aliquam faucibus lorem ipsum. Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor. Incididunt ut labore et dolore magna aliqua ut enim. Ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex. Ea commodo consequat.</p>
+            <ul class="step-list">
+              <li><b>Steg 1</b><div>Duis aute irure dolor in reprehenderit in voluptate velit. Esse cillum dolore eu fugiat nulla.</div></li>
+              <li><b>Steg 2</b><div><p>Pariatur excepteur sint occaecat cupidatat non proident sunt in. Culpa qui officia deserunt mollit anim id est laborum curabitur.</p><p class="prompt"><span class="prompt-label">Exempel från tillfället</span>”Pretium tincidunt lacus nulla gravida orci a odio nullam. Varius turpis et commodo pharetra est eros bibendum elit nec luctus magna. Felis sollicitudin mauris integer in mauris eu nibh?”</p></div></li>
+              <li><b>Steg 3</b><div><p>Euismod gravida duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit etiam tempor ut ullamcorper ligula eu tempor. Congue eros est euismod turpis id tincidunt sapien risus?</p><p class="prompt"><span class="prompt-label">Förslag</span>”A quam maecenas fermentum consequat mi donec fermentum pellentesque …”</p></div></li>
+              <li><b>Steg 4</b><div>Malesuada nulla a mi duis sapien sem aliquet nec. Commodo eget consequat quis neque.</div></li>
+              <li class="reflect"><b>Reflektion</b><div>Aliquam faucibus lorem ipsum dolor sit amet consectetur adipiscing. Elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud. Exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure?</div></li>
+            </ul>
+            <div class="callout tip"><p class="callout-title">💡 Tips för disken</p><p>Dolor in reprehenderit in voluptate velit esse cillum dolore. Eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in. Culpa qui officia deserunt mollit anim id. Est laborum curabitur pretium tincidunt lacus nulla gravida orci a odio. Nullam varius turpis et commodo pharetra est eros bibendum elit nec luctus magna. Felis sollicitudin mauris integer in mauris eu nibh. Euismod gravida duis ac tellus et risus vulputate vehicula donec. Lobortis risus a elit etiam tempor.</p></div>
+          </div></div></div>
+        </div>
+        <div class="acc" id="d1-bollplank" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">02</span><span class="acc-head"><span class="acc-title">AI som bollplank</span><span class="acc-desc">Ut ullamcorper ligula eu tempor congue eros est euismod. Turpis id tincidunt.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+            <p>Sapien risus a quam maecenas fermentum consequat mi donec. Fermentum pellentesque malesuada nulla a mi duis sapien sem aliquet nec commodo. Eget consequat quis neque aliquam faucibus lorem. Ipsum dolor sit amet consectetur adipiscing.</p>
+            <ul class="step-list">
+              <li><b>Steg 1</b><div>Elit sed do eiusmod tempor incididunt ut labore et. Dolore magna aliqua ut enim.</div></li>
+              <li><b>Steg 2</b><div><p>Ad minim veniam quis nostrud exercitation ullamco laboris:</p><p class="prompt"><span class="prompt-label">Startprompt</span>”Nisi ut aliquip ex ea commodo consequat duis aute. Irure dolor in.”</p><p>Reprehenderit in voluptate velit esse cillum dolore eu fugiat. Nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia.</p></div></li>
+              <li><b>Steg 3</b><div>Deserunt mollit anim id est laborum curabitur pretium tincidunt. Lacus nulla gravida orci a odio nullam varius turpis et commodo pharetra. Est eros bibendum elit nec luctus magna. Felis sollicitudin mauris integer in mauris eu nibh euismod gravida duis. Ac tellus et risus vulputate vehicula.</div></li>
+              <li class="reflect"><b>Reflektion</b><div>Donec lobortis risus a elit etiam tempor ut ullamcorper. Ligula eu tempor congue eros est euismod?</div></li>
+            </ul>
+            <div class="acc soft"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">💬</span><span class="acc-head"><span class="acc-title">Det här kom grupperna fram till</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Turpis id tincidunt sapien risus a quam maecenas fermentum. Consequat mi donec fermentum pellentesque malesuada nulla a mi duis sapien sem. Aliquet nec commodo eget consequat quis neque. Aliquam faucibus lorem ipsum dolor sit amet consectetur adipiscing elit sed. Do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad. Minim veniam quis nostrud exercitation ullamco laboris nisi. Ut aliquip ex ea commodo consequat duis aute irure dolor. In reprehenderit in voluptate velit esse cillum dolore eu. Fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa. Qui officia deserunt.</p></div></div></div></div>
+          </div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">På egen hand</div>
+        <h3 class="block-title">Hemuppgifter</h3>
+        <p>Mollit anim id est laborum curabitur pretium tincidunt lacus. Nulla gravida orci.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="table-wrap" data-reveal="up">
+          <table class="t">
+            <caption class="sr-only">Översikt över hemuppgifterna i Del 1</caption>
+            <thead><tr><th>#</th><th>Uppgift</th><th class="hide-sm">Fokusområde</th><th class="hide-sm">Verktyg</th><th><span class="sr-only">Gå till</span></th></tr></thead>
+            <tbody>
+              <tr class="link-row" data-open="d1-hu1"><td class="num">01</td><td>Prompt-pusslet</td><td class="hide-sm">Strukturerad vs. naturlig strategi</td><td class="hide-sm">Copilot</td><td class="go">Öppna →</td></tr>
+              <tr class="link-row" data-open="d1-hu2"><td class="num">02</td><td>Skrivarassistenten</td><td class="hide-sm">Kommunikation &amp; textproduktion</td><td class="hide-sm">Copilot</td><td class="go">Öppna →</td></tr>
+              <tr class="link-row" data-open="d1-hu3"><td class="num">03</td><td>Skapa din första AI-agent</td><td class="hide-sm">Skapa en agent i Copilot</td><td class="hide-sm">Copilot</td><td class="go">Öppna →</td></tr>
+              <tr class="link-row" data-open="d1-hu4"><td class="num">04</td><td>Personliga inställningar &amp; minnesfunktioner</td><td class="hide-sm">Personliga anpassningar</td><td class="hide-sm">Copilot</td><td class="go">Öppna →</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="stagger">
+          <div class="acc" id="d1-hu1" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">01</span><span class="acc-head"><span class="acc-title">Prompt-pusslet</span><span class="acc-desc">A odio nullam varius turpis et</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+              <p>Commodo pharetra est eros bibendum elit nec luctus magna. Felis sollicitudin mauris integer in mauris eu nibh euismod gravida duis ac. Tellus et risus vulputate vehicula donec lobortis risus a.</p>
+              <ul class="step-list">
+                <li><b>Del A</b><div><strong>Elit etiam:</strong> Tempor ut ullamcorper ligula eu tempor congue eros est. Euismod turpis id tincidunt sapien risus a quam maecenas fermentum consequat mi.</div></li>
+                <li><b>Del B</b><div><strong>Donec fermentum:</strong> Pellentesque malesuada nulla a mi duis sapien sem aliquet. Nec commodo eget consequat quis neque aliquam faucibus lorem ipsum dolor sit. Amet consectetur adipiscing elit sed do eiusmod. Tempor incididunt ut labore et dolore magna aliqua ut enim ad. Minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip.</div></li>
+                <li class="reflect"><b>Reflektion</b><div>Ex ea commodo consequat duis aute irure dolor in. Reprehenderit in voluptate velit esse cillum dolore?</div></li>
+              </ul>
+            </div></div></div>
+          </div>
+          <div class="acc" id="d1-hu2" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">02</span><span class="acc-head"><span class="acc-title">Skrivarassistenten</span><span class="acc-desc">Eu  fugiat nulla pariatur</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+              <p>Excepteur sint occaecat cupidatat non proident sunt in culpa. Qui officia deserunt mollit anim id est laborum curabitur pretium tincidunt lacus nulla).</p>
+              <p class="small">Gravida orci a odio nullam varius turpis et commodo. Pharetra est eros bibendum:</p>
+              <div class="links">
+                <a class="link-card dl" href="#" data-demo><span class="lc-title">Rutiner på biblioteket</span><span class="lc-desc">Elit nec luctus magna felis sollicitudin mauris integer in mauris.</span></a>
+                <a class="link-card dl" href="#" data-demo><span class="lc-title">Krångligt exempel</span><span class="lc-desc">Eu nibh euismod gravida duis ac tellus et risus vulputate.</span></a>
+                <a class="link-card dl" href="#" data-demo><span class="lc-title">Mejl från biblioteket</span><span class="lc-desc">Vehicula donec lobortis risus a elit etiam tempor ut. Ullamcorper ligula eu tempor.</span></a>
+              </div>
+              <ul class="step-list">
+                <li><b>Steg 1</b><div>Congue eros est euismod turpis id tincidunt sapien risus. A quam maecenas fermentum consequat mi donec fermentum pellentesque?</div></li>
+                <li><b>Steg 2</b><div>Malesuada nulla a mi duis sapien sem aliquet nec. Commodo eget consequat quis neque aliquam faucibus lorem ipsum.</div></li>
+                <li><b>Steg 3</b><div>Dolor sit amet consectetur adipiscing elit sed do eiusmod. Tempor incididunt ut labore et dolore magna aliqua ut enim ad minim. Veniam quis nostrud exercitation?</div></li>
+              </ul>
+            </div></div></div>
+          </div>
+          <div class="acc" id="d1-hu3" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">03</span><span class="acc-head"><span class="acc-title">Skapa din första AI-agent</span><span class="acc-desc">Ullamco laboris nisi ut aliquip ex ea.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+              <div class="callout plain"><p>🎬 commodo consequat duis aute? <a href="assets/video/demo.mp4" target="_blank" rel="noopener">Irure dolor</a> in reprehenderit in voluptate velit esse cillum.</p></div>
+              <p>Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat. Non proident sunt in culpa qui officia deserunt mollit anim id.</p>
+              <ul class="step-list">
+                <li><b>Grupp</b><div>Est laborum curabitur pretium tincidunt lacus nulla gravida orci. A odio nullam varius turpis et commodo pharetra est eros bibendum elit.</div></li>
+                <li><b>Fokus</b><div>Nec luctus magna felis sollicitudin mauris integer in mauris eu.</div></li>
+                <li><b>Skapa</b><div>Nibh euismod gravida duis ac tellus et risus vulputate. Vehicula donec lobortis risus a elit etiam tempor ut ullamcorper ligula eu. Tempor congue eros est euismod turpis id. Tincidunt sapien risus a quam.</div></li>
+                <li><b>Testa</b><div>Maecenas fermentum consequat mi donec fermentum pellentesque malesuada nulla. A mi duis sapien sem aliquet nec commodo eget.</div></li>
+                <li class="reflect"><b>Reflektion</b><div>Consequat quis neque aliquam faucibus lorem ipsum dolor sit?</div></li>
+                <li><b>Dela</b><div>Amet consectetur adipiscing elit sed do eiusmod tempor incididunt. Ut labore et dolore.</div></li>
+              </ul>
+            </div></div></div>
+          </div>
+          <div class="acc" id="d1-hu4" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">04</span><span class="acc-head"><span class="acc-title">Personliga inställningar &amp; minnesfunktioner</span><span class="acc-desc">Magna aliqua ut enim</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+              <div class="callout plain"><p>🎬 ad minim veniam quis nostrud exercitation? <a href="assets/video/demo.mp4" target="_blank" rel="noopener">Ullamco laboris nisi</a> ut aliquip ex.</p></div>
+              <p>Ea commodo consequat duis aute irure dolor in reprehenderit. In voluptate velit esse.</p>
+              <ul class="step-list">
+                <li><b>Steg 1</b><div>Cillum dolore eu fugiat nulla pariatur excepteur sint occaecat. Cupidatat non proident sunt in culpa qui officia.</div></li>
+                <li><b>Steg 2</b><div>Deserunt mollit anim id est laborum curabitur pretium tincidunt).</div></li>
+                <li><b>Steg 3</b><div>Lacus nulla gravida orci a odio nullam varius turpis. Et commodo pharetra est eros bibendum elit nec.</div></li>
+                <li><b>Steg 4</b><div>Luctus magna felis sollicitudin mauris integer in mauris eu. Nibh euismod gravida duis.</div></li>
+                <li><b>Steg 5</b><div>Ac tellus et risus vulputate vehicula donec lobortis risus. A elit etiam tempor ut ullamcorper ligula eu tempor congue eros est. Euismod turpis id.</div></li>
+              </ul>
+            </div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="part-foot"><a class="to-top" href="#top">↑ Tillbaka till toppen</a></div>
+  </div>
+</section>
+
+<!-- ═══════════════ DEL 2 ═══════════════ -->
+<section class="part" id="del2" data-part="del2" aria-labelledby="del2-titel">
+  <div class="part-band shelf-bg">
+    <header class="part-head frost">
+      <div>
+        <span class="pill">Del 2 · Tillfälle 2</span>
+        <h2 class="part-title" id="del2-titel">Informations&shy;sökning och <em>AI</em></h2>
+        <p class="part-ingress">Tincidunt sapien risus a quam maecenas fermentum consequat mi donec.</p>
+      </div>
+      <div class="part-num" aria-hidden="true">02</div>
+    </header>
+  </div>
+  <div class="part-body">
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Från tillfället</div>
+        <h3 class="block-title">Presentation och inspelning</h3>
+        <p>Fermentum pellentesque malesuada nulla a mi duis sapien sem. Aliquet nec commodo.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="material stagger">
+          <a class="mat-card" href="assets/img/omslag-del2.jpg" data-lightbox data-full="assets/img/omslag-del2.jpg" data-title="Presentation, del 2 (platshållare)">
+            <div class="mat-media"><img src="assets/img/omslag-del2.jpg" alt="Titelbild ur presentationen för Del 2" loading="lazy" width="720" height="405"></div>
+            <div class="mat-body">
+              <div><div class="mat-kind">Presentation</div><div class="mat-title">Presentationen från tillfället</div><div class="mat-meta">Bild · platshållare</div></div>
+              <span class="mat-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg></span>
+            </div>
+          </a>
+          <div class="mat-card">
+            <div class="video" data-src="assets/video/demo.mp4">
+              <button type="button" aria-label="Spela upp inspelningen från Tillfälle 2"><img src="assets/img/video-poster.jpg" alt="" loading="lazy"><span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
+            </div>
+            <div class="mat-body">
+              <div><div class="mat-kind">Inspelning</div><div class="mat-title">Tillfälle 2 i sin helhet</div><div class="mat-meta">Video · <a href="assets/video/demo.mp4" target="_blank" rel="noopener">öppna i ny flik</a></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Teori</div>
+        <h3 class="block-title">Så har AI-sökningen vuxit fram</h3>
+        <p>Eget consequat quis neque aliquam faucibus lorem ipsum dolor. Sit amet consectetur adipiscing elit sed do.</p>
+      </div></div>
+      <div class="block-body">
+
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">En kort historia</h4>
+          <p class="prose" data-reveal="up">Eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut. Aliquip ex ea commodo consequat duis aute. Irure dolor in reprehenderit in voluptate velit esse cillum dolore eu. Fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui. Officia deserunt mollit anim id est laborum curabitur. Pretium tincidunt lacus nulla gravida orci a odio nullam varius. Turpis et commodo pharetra est eros bibendum elit nec. Luctus magna felis sollicitudin mauris integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit etiam tempor ut ullamcorper ligula eu. Tempor congue eros est euismod turpis id tincidunt sapien risus a quam maecenas fermentum.</p>
+          <ol class="timeline" aria-label="AI-sökningens utveckling 2022–2025">
+            <li style="--i: 0"><span class="tl-year">2022</span><b>Genombrottet för generativ AI</b><span>Consequat mi donec fermentum pellentesque malesuada nulla a mi. Duis sapien sem aliquet nec commodo eget consequat quis neque aliquam faucibus. Lorem ipsum dolor sit amet consectetur.</span></li>
+            <li style="--i: 1"><span class="tl-year">2023</span><b>Sökmotorer med AI</b><span>Adipiscing elit sed do eiusmod tempor incididunt ut labore. Et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation. Ullamco laboris nisi ut aliquip ex ea commodo.</span></li>
+            <li style="--i: 2"><span class="tl-year">2024</span><b>AI söker på webben själv</b><span>Consequat duis aute irure dolor in reprehenderit in voluptate. Velit esse cillum dolore eu fugiat.</span></li>
+            <li style="--i: 3"><span class="tl-year">2025</span><b>AI som primär sökmotor</b><span>Nulla pariatur excepteur sint occaecat cupidatat non proident sunt. In culpa qui officia deserunt.</span></li>
+          </ol>
+        </div>
+
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Hur många använder AI?</h4>
+          <div class="stats stagger">
+            <div class="stat"><div class="stat-num" data-count="81" data-suffix=" %">81 %</div><p>mollit anim id est laborum curabitur pretium tincidunt lacus.</p></div>
+            <div class="stat"><div class="stat-num" data-count="6" data-suffix=" av 10">6 av 10</div><p>– nulla gravida orci a odio nullam varius turpis.</p></div>
+            <div class="stat"><div class="stat-num" data-count="71" data-suffix=" %">71 %</div><p>et commodo pharetra.</p></div>
+          </div>
+          <div class="prose" data-reveal="up">
+            <p>Est eros bibendum elit nec luctus magna felis sollicitudin. Mauris integer in mauris eu nibh euismod gravida duis ac tellus et. Risus vulputate vehicula donec lobortis risus a. Elit etiam tempor ut ullamcorper ligula eu tempor congue eros est. Euismod turpis id tincidunt sapien risus a quam maecenas.</p>
+            <p>Fermentum consequat mi donec fermentum pellentesque malesuada nulla a. Mi duis sapien sem aliquet nec commodo eget consequat quis neque aliquam. Faucibus lorem ipsum dolor sit amet consectetur. Adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore. Magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi. Ut aliquip ex ea commodo consequat duis aute. Irure dolor in reprehenderit in voluptate.</p>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Så fungerar AI-assisterad informationssökning</h4>
+          <p class="prose" data-reveal="up">Velit esse cillum dolore eu fugiat nulla pariatur excepteur. Sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit. Anim id est laborum curabitur pretium tincidunt. Lacus nulla gravida orci a odio nullam varius turpis et commodo. Pharetra est eros bibendum elit nec luctus magna felis sollicitudin mauris integer in. Mauris eu nibh euismod gravida duis ac tellus. Et risus vulputate:</p>
+          <ol class="flow" aria-label="Så går en AI-sökning till">
+            <li>Vehicula donec lobortis risus.</li>
+            <li>A elit etiam tempor ut ullamcorper ligula eu tempor. Congue eros est euismod turpis id tincidunt.</li>
+            <li>Sapien risus a quam maecenas fermentum consequat mi donec. Fermentum pellentesque malesuada nulla a mi duis.</li>
+            <li>Sapien sem aliquet nec commodo eget consequat quis neque. Aliquam faucibus lorem ipsum dolor sit amet consectetur adipiscing elit.</li>
+            <li>Sed do eiusmod tempor incididunt ut labore et dolore. Magna aliqua ut enim ad minim veniam quis.</li>
+            <li>Nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.</li>
+          </ol>
+          <div class="prose" data-reveal="up">
+            <p>Consequat duis aute irure dolor in reprehenderit in voluptate. Velit esse cillum dolore eu fugiat nulla pariatur excepteur.</p>
+            <p>Sint occaecat cupidatat non proident sunt in culpa qui. Officia deserunt mollit anim id est laborum curabitur pretium tincidunt lacus nulla. Gravida orci a odio nullam varius turpis. Et commodo pharetra est eros bibendum elit nec luctus magna felis. Sollicitudin mauris integer in mauris eu nibh euismod gravida duis ac.</p>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Hur ofta blir det fel?</h4>
+          <p class="prose" data-reveal="up">Tellus et risus vulputate vehicula donec lobortis risus a. Elit etiam tempor ut ullamcorper ligula eu tempor congue eros est euismod. Turpis id tincidunt sapien risus a quam. Maecenas fermentum consequat mi donec fermentum pellentesque malesuada nulla a mi. Duis sapien sem aliquet nec commodo eget consequat quis neque aliquam faucibus lorem. Ipsum dolor sit amet consectetur adipiscing elit sed. Do eiusmod tempor incididunt.</p>
+          <div class="bars" role="img" aria-label="Stapeldiagram (demo)">
+            <div class="bar total"><span>Ut labore et</span><span class="bar-track"><span class="bar-fill" style="--v: 45"></span></span><span class="bar-val">45 %</span></div>
+            <div class="bar"><span>Dolore</span><span class="bar-track"><span class="bar-fill" style="--v: 76"></span></span><span class="bar-val">76 %</span></div>
+            <div class="bar"><span>Magna</span><span class="bar-track"><span class="bar-fill" style="--v: 36.5"></span></span><span class="bar-val">36–37 %</span></div>
+            <div class="bar"><span>Aliqua</span><span class="bar-track"><span class="bar-fill" style="--v: 36.5"></span></span><span class="bar-val">36–37 %</span></div>
+            <div class="bar"><span>Ut</span><span class="bar-track"><span class="bar-fill" style="--v: 30"></span></span><span class="bar-val">30 %</span></div>
+            <p class="bars-note">Enim ad minim veniam quis nostrud exercitation ullamco laboris.</p>
+          </div>
+          <div class="prose" data-reveal="up">
+            <p>Nisi ut aliquip:</p>
+            <ul>
+              <li>Ex ea commodo consequat duis aute irure dolor in. Reprehenderit in voluptate velit esse cillum.</li>
+              <li>Dolore eu fugiat nulla pariatur excepteur sint occaecat.</li>
+              <li>Cupidatat non proident sunt in culpa qui officia deserunt mollit.</li>
+              <li>Anim id est laborum curabitur pretium tincidunt.</li>
+              <li>Lacus nulla gravida orci a odio nullam.</li>
+            </ul>
+            <p>Varius turpis et commodo pharetra est eros bibendum elit. Nec luctus magna felis sollicitudin mauris integer in mauris eu nibh euismod. Gravida duis ac tellus et risus vulputate. Vehicula donec lobortis risus a elit etiam tempor ut ullamcorper ligula. Eu tempor congue eros est euismod turpis id tincidunt sapien risus a quam. Maecenas fermentum consequat mi donec fermentum pellentesque malesuada. Nulla a mi duis sapien sem aliquet nec commodo eget. Consequat quis neque aliquam faucibus lorem ipsum dolor sit. Amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et. Dolore magna aliqua.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Demonstrationer</div>
+        <h3 class="block-title">Det jag visade, fyra sätt att söka</h3>
+        <p>Ut enim ad minim veniam quis nostrud exercitation ullamco. Laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor. In reprehenderit in voluptate velit esse cillum.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="grid grid-2 acc-grid stagger">
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">01</span><span class="acc-head"><span class="acc-title">Ge sammanhang vid svåra referensfrågor</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+              <p>Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat. Non proident sunt in culpa:</p>
+              <p class="prompt"><span class="prompt-label">Prompt</span>”Qui officia deserunt mollit anim id est laborum curabitur. Pretium tincidunt lacus nulla gravida orci a odio nullam varius turpis et. Commodo pharetra est eros bibendum elit nec. Luctus magna felis sollicitudin mauris integer in.”</p>
+              <p>Mauris eu nibh euismod gravida duis ac tellus et. Risus vulputate vehicula donec lobortis risus a elit etiam tempor ut ullamcorper. Ligula eu tempor congue eros est euismod. Turpis id tincidunt sapien risus a quam maecenas fermentum consequat mi. Donec fermentum pellentesque malesuada nulla a mi duis sapien sem aliquet nec commodo. Eget consequat quis neque aliquam faucibus lorem ipsum. Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor. Incididunt ut labore et dolore magna aliqua ut enim. Ad minim veniam quis nostrud exercitation ullamco laboris nisi ut.</p>
+            </div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">02</span><span class="acc-head"><span class="acc-title">Be modellen verifiera sina svar</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+              <p>Aliquip ex ea commodo consequat duis aute irure dolor:</p>
+              <p class="prompt"><span class="prompt-label">Prompt</span>”In reprehenderit in voluptate velit esse cillum dolore eu. Fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa. Qui officia deserunt mollit anim id est. Laborum curabitur pretium tincidunt lacus nulla gravida orci a odio nullam. Varius turpis et commodo pharetra est eros bibendum elit nec luctus magna felis. Sollicitudin mauris integer.”</p>
+              <p>In mauris eu nibh euismod gravida duis ac tellus. Et risus vulputate vehicula donec lobortis risus a elit etiam tempor ut. Ullamcorper ligula eu tempor congue eros est. Euismod turpis id tincidunt sapien risus a quam maecenas fermentum consequat. Mi donec fermentum pellentesque malesuada nulla a mi duis sapien sem aliquet nec. Commodo eget consequat quis neque aliquam faucibus lorem. Ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod. Tempor incididunt ut labore.</p>
+            </div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">03</span><span class="acc-head"><span class="acc-title">Fråga neutralt när du faktagranskar</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+              <p>Et dolore magna aliqua ut enim ad minim veniam. Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in. Voluptate velit esse.</p>
+              <div class="callout tip"><p><strong>Cillum!</strong> Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat. Non proident sunt in culpa qui officia deserunt mollit.</p></div>
+              <p>Anim id est laborum:</p>
+              <p class="prompt"><span class="prompt-label">Neutral fråga</span>”Curabitur pretium tincidunt lacus nulla gravida orci a odio. Nullam varius turpis et commodo pharetra est eros bibendum elit nec luctus. Magna felis sollicitudin mauris integer?”</p>
+              <p>In mauris eu nibh euismod gravida duis ac tellus. Et risus vulputate vehicula donec lobortis risus a elit etiam tempor ut. Ullamcorper ligula eu tempor congue eros est euismod.</p>
+              <p>Turpis id tincidunt sapien:</p>
+              <p class="prompt"><span class="prompt-label">Vinklad fråga</span>”Risus a quam maecenas fermentum consequat mi donec fermentum. Pellentesque malesuada nulla a mi duis sapien sem aliquet nec commodo eget. Consequat quis neque aliquam faucibus?”</p>
+              <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed. Do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim. Ad minim veniam quis nostrud exercitation ullamco. Laboris nisi ut aliquip ex ea commodo consequat duis aute irure. Dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident sunt in. Culpa qui officia deserunt mollit anim id est laborum curabitur pretium.</p>
+            </div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">04</span><span class="acc-head"><span class="acc-title">Deep research</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+              <p>Tincidunt lacus nulla gravida orci a odio nullam varius. Turpis et commodo pharetra est eros bibendum elit nec luctus magna felis. Sollicitudin mauris integer in mauris eu nibh. Euismod gravida duis ac tellus et risus vulputate vehicula donec lobortis. Risus a elit etiam tempor ut ullamcorper ligula:</p>
+              <p class="prompt"><span class="prompt-label">Prompt</span>”Eu tempor congue eros est euismod turpis id tincidunt. Sapien risus a quam maecenas fermentum consequat mi donec fermentum pellentesque?”</p>
+              <p>Malesuada nulla a mi duis sapien sem aliquet nec. Commodo eget consequat quis neque aliquam faucibus lorem ipsum dolor sit amet. Consectetur adipiscing elit sed do eiusmod tempor. Incididunt ut labore et dolore magna aliqua ut enim ad minim. Veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate. Velit esse cillum dolore eu.</p>
+            </div></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Källkritik</div>
+        <h3 class="block-title">Fallgropar och källkritik</h3>
+        <p>Fugiat nulla pariatur excepteur sint occaecat cupidatat non proident. Sunt in culpa qui officia deserunt mollit anim id est laborum curabitur pretium tincidunt.</p>
+      </div></div>
+      <div class="block-body">
+
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Inställsamhet och bias</h4>
+          <div class="grid grid-3 acc-grid stagger">
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🙇</span><span class="acc-head"><span class="acc-title">Inställsamhet</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Lacus nulla gravida orci a odio nullam varius turpis. Et commodo pharetra est eros bibendum elit nec luctus magna felis sollicitudin. Mauris integer in mauris eu nibh euismod. Gravida duis ac tellus et risus vulputate vehicula donec lobortis risus. A elit etiam tempor ut ullamcorper ligula eu tempor congue eros est euismod. Turpis id tincidunt sapien risus a quam maecenas. Fermentum consequat mi donec fermentum pellentesque malesuada.</p></div></div></div></div>
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">⚖️</span><span class="acc-head"><span class="acc-title">Bias</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Nulla a mi duis sapien sem aliquet nec commodo. Eget consequat quis neque aliquam faucibus lorem ipsum dolor sit amet consectetur. Adipiscing elit sed do eiusmod tempor incididunt. Ut labore et dolore magna aliqua ut enim ad minim veniam. Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis. Aute irure dolor in reprehenderit in voluptate velit. Esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat. Cupidatat non proident.</p></div></div></div></div>
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🍷</span><span class="acc-head"><span class="acc-title">Se bias själv</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Sunt in culpa qui officia deserunt mollit anim id. Est laborum curabitur pretium tincidunt lacus nulla gravida orci a odio nullam. Varius turpis et commodo pharetra est eros. Bibendum elit nec luctus magna felis sollicitudin mauris integer in mauris. Eu nibh euismod gravida duis ac tellus et risus vulputate vehicula donec lobortis. Risus a elit etiam tempor ut ullamcorper.</p></div></div></div></div>
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🫧</span><span class="acc-head"><span class="acc-title">Filterbubblor</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Ligula eu tempor congue eros est euismod turpis id. Tincidunt sapien risus a quam maecenas fermentum consequat mi donec fermentum pellentesque. Malesuada nulla a mi duis sapien sem. Aliquet nec commodo eget consequat quis neque aliquam faucibus lorem ipsum. Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore. Et dolore magna aliqua ut enim ad minim. Veniam quis nostrud exercitation ullamco laboris nisi.</p></div></div></div></div>
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">📝</span><span class="acc-head"><span class="acc-title">Instruktioner är förslag, inte regler</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Ut aliquip ex ea commodo consequat duis aute irure. Dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla. Pariatur excepteur sint occaecat cupidatat non proident. Sunt in culpa.</p></div></div></div></div>
+            </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Hur kollar man ett AI-svar? Fem strategier</h4>
+          <p class="prose" data-reveal="up">Qui officia deserunt mollit anim id est laborum curabitur. Pretium tincidunt lacus nulla gravida orci a odio nullam varius:</p>
+          <div class="grid grid-3 stagger">
+            <div class="card feature"><span class="rating r5"><span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span>Turpis et commodo pharetra</span><h4>Jämföra med andra källor, till exempel Wikipedia, en bok eller en kunnig person</h4><p>Est eros bibendum elit nec luctus magna felis sollicitudin. Mauris integer in mauris eu nibh euismod gravida duis ac tellus et. Risus vulputate vehicula donec lobortis risus a.</p></div>
+            <div class="card feature"><span class="rating r4"><span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span>Elit etiam</span><h4>Ställa samma fråga i flera AI-tjänster</h4><p>Tempor ut ullamcorper ligula eu tempor congue eros est. Euismod turpis id tincidunt sapien risus a quam maecenas fermentum consequat mi. Donec fermentum pellentesque malesuada nulla a mi duis.</p></div>
+            <div class="card feature"><span class="rating r3"><span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>Sapien sem</span><h4>Ställa följdfrågor och be modellen kontrollera sig själv</h4><p>Aliquet nec commodo eget consequat quis neque aliquam faucibus. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut.</p></div>
+            <div class="card feature"><span class="rating r1"><span class="meter" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span>Labore et</span><h4>Skriva ”hitta inte på” i instruktionen</h4><p>Dolore magna aliqua ut enim.</p></div>
+            <div class="card feature"><span class="rating r3"><span class="meter" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span>Ad minim</span><h4>Rimlighetsbedömning</h4><p>Veniam quis nostrud exercitation ullamco laboris nisi ut aliquip. Ex ea commodo consequat duis aute irure dolor in reprehenderit in voluptate. Velit esse cillum.</p></div>
+          </div>
+        </div>
+
+        <div class="subblock" id="beslutsmodellen">
+          <h4 class="h3" data-reveal="up">Hur viktig är sanningen just nu?</h4>
+          <p class="prose" data-reveal="up">Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat. Non proident sunt in culpa qui officia deserunt mollit anim id est. Laborum curabitur pretium tincidunt lacus nulla gravida. Orci a odio nullam varius turpis et commodo pharetra est eros. Bibendum elit nec luctus magna felis sollicitudin mauris integer in mauris eu nibh euismod:</p>
+          <div class="decision stagger" role="table" aria-label="Den pragmatiska beslutsmodellen">
+            <div class="decision-row head" role="row"><div role="columnheader">Gravida duis ac tellus?</div><div role="columnheader">Et risus vulputate vehicula?</div><div role="columnheader">Donec lobortis risus?</div><div role="columnheader">A elit etiam tempor?</div></div>
+            <div class="decision-row" role="row"><div class="purpose" role="cell">Nyfikenhet</div><div role="cell"><span class="k">Måste det vara sant?</span>Ut ullamcorper ligula</div><div role="cell"><span class="k">Har du domänkunskap?</span>Eu tempor congue</div><div class="verdict ok" role="cell"><span class="k">Kan du använda AI?</span>Eros est!</div></div>
+            <div class="decision-row" role="row"><div class="purpose" role="cell">Utforskande sökning</div><div role="cell"><span class="k">Måste det vara sant?</span>Euismod</div><div role="cell"><span class="k">Har du domänkunskap?</span>Turpis id tincidunt</div><div class="verdict ok" role="cell"><span class="k">Kan du använda AI?</span>Sapien</div></div>
+            <div class="decision-row" role="row"><div class="purpose" role="cell">Uppgiftsstyrd sökning</div><div role="cell"><span class="k">Måste det vara sant?</span>Risus</div><div role="cell"><span class="k">Har du domänkunskap?</span>A</div><div class="verdict warn" role="cell"><span class="k">Kan du använda AI?</span>Quam maecenas fermentum consequat mi donec fermentum)</div></div>
+            <div class="decision-row" role="row"><div class="purpose" role="cell">Uppgiftsstyrd sökning</div><div role="cell"><span class="k">Måste det vara sant?</span>Pellentesque</div><div role="cell"><span class="k">Har du domänkunskap?</span>Malesuada</div><div class="verdict bad" role="cell"><span class="k">Kan du använda AI?</span>Nulla a mi duis</div></div>
+          </div>
+          <p class="prose" data-reveal="up">Sapien sem aliquet nec commodo eget consequat quis neque. Aliquam faucibus lorem ipsum dolor sit amet consectetur adipiscing elit sed do. Eiusmod tempor incididunt ut labore et dolore. Magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco. Laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in. Reprehenderit in voluptate velit esse cillum dolore eu. Fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt. In culpa qui officia deserunt mollit anim id est. Laborum curabitur pretium tincidunt lacus nulla gravida orci a odio nullam varius.</p>
+          <div class="poster" data-reveal="right">
+            <button class="poster-thumb" type="button" data-lightbox data-full="material/affischer/affisch-pragmatiska-beslutsmodellen.jpg" data-pdf="material/affischer/affisch-pragmatiska-beslutsmodellen.pdf" data-title="Affisch: AI vid informationssökning – Den pragmatiska beslutsmodellen" aria-label="Visa affischen Den pragmatiska beslutsmodellen i större format"><img src="assets/img/affisch-pragmatiska-beslutsmodellen.jpg" alt="Affischen AI vid informationssökning – Den pragmatiska beslutsmodellen" loading="lazy" width="637" height="900"></button>
+            <div class="poster-body">
+              <span class="pill">Affisch att ladda ner</span>
+              <h4>AI vid informationssökning – Den pragmatiska beslutsmodellen</h4>
+              <p>Turpis et commodo pharetra est eros bibendum elit nec. Luctus magna felis sollicitudin mauris integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit etiam tempor.</p>
+              <div class="btn-row">
+                <a class="btn primary sm" href="material/affischer/affisch-pragmatiska-beslutsmodellen.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>Ladda ner PDF</a>
+                <a class="btn sm" href="material/affischer/affisch-pragmatiska-beslutsmodellen.jpg" download>Bild (JPG)</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subblock" id="kallkritik-ai-eran">
+          <h4 class="h3" data-reveal="up">Källkritik i AI-eran</h4>
+          <p class="prose" data-reveal="up">Ut ullamcorper ligula eu tempor congue eros est euismod. Turpis id tincidunt sapien risus a quam maecenas:</p>
+          <div class="kk">
+            <div class="kk-row kk-headrow"><div class="kk-head">Kriterium</div><div class="kk-head">Klassisk källkritik</div><div></div><div class="kk-head">MIK-fråga att ställa</div></div>
+            <div class="kk-row stagger from-right">
+              <div class="kk-crit">Beroende</div>
+              <div class="kk-classic"><span class="kk-tag">Klassisk källkritik</span>Fermentum consequat mi donec fermentum pellentesque?</div>
+              <div class="kk-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+              <div class="kk-mik"><span class="kk-tag">MIK-fråga att ställa</span><q>Malesuada nulla a mi duis sapien?</q><span>→ sem aliquet nec.</span></div>
+            </div>
+            <div class="kk-row stagger from-right">
+              <div class="kk-crit">Äkthet</div>
+              <div class="kk-classic"><span class="kk-tag">Klassisk källkritik</span>Commodo eget consequat quis neque?</div>
+              <div class="kk-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+              <div class="kk-mik"><span class="kk-tag">MIK-fråga att ställa</span><q>Aliquam faucibus lorem ipsum dolor sit amet?</q><span>→ consectetur adipiscing elit sed do eiusmod?</span></div>
+            </div>
+            <div class="kk-row stagger from-right">
+              <div class="kk-crit">Tid</div>
+              <div class="kk-classic"><span class="kk-tag">Klassisk källkritik</span>Tempor incididunt ut?</div>
+              <div class="kk-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+              <div class="kk-mik"><span class="kk-tag">MIK-fråga att ställa</span><q>Labore et dolore magna aliqua ut enim?</q><span>→ ad minim veniam?</span></div>
+            </div>
+            <div class="kk-row stagger from-right">
+              <div class="kk-crit">Tendens</div>
+              <div class="kk-classic"><span class="kk-tag">Klassisk källkritik</span>Quis nostrud exercitation ullamco laboris nisi?</div>
+              <div class="kk-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+              <div class="kk-mik"><span class="kk-tag">MIK-fråga att ställa</span><q>Ut aliquip ex ea commodo consequat duis?</q><span>→ aute irure dolor in.</span></div>
+            </div>
+          </div>
+          <div class="poster" data-reveal="right">
+            <button class="poster-thumb" type="button" data-lightbox data-full="material/affischer/affisch-kallkritik-i-ai-eran.jpg?v=2" data-pdf="material/affischer/affisch-kallkritik-i-ai-eran.pdf?v=2" data-title="Affisch: Källkritik i AI-eran – En ny tolkning" aria-label="Visa affischen Källkritik i AI-eran i större format"><img src="assets/img/affisch-kallkritik-i-ai-eran.jpg?v=2" alt="Affischen Källkritik i AI-eran – En ny tolkning" loading="lazy" width="640" height="857"></button>
+            <div class="poster-body">
+              <span class="pill">Affisch att ladda ner</span>
+              <h4>Källkritik i AI-eran – En ny tolkning</h4>
+              <p>Reprehenderit in voluptate velit esse cillum dolore eu fugiat. Nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui. Officia deserunt mollit anim id est.</p>
+              <div class="btn-row">
+                <a class="btn primary sm" href="material/affischer/affisch-kallkritik-i-ai-eran.pdf?v=2" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>Ladda ner PDF</a>
+                <a class="btn sm" href="material/affischer/affisch-kallkritik-i-ai-eran.jpg?v=2" download>Bild (JPG)</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subblock" id="sok-battre">
+          <h4 class="h3" data-reveal="up">Så söker du bättre med AI</h4>
+          <p class="prose" data-reveal="up">Laborum curabitur pretium tincidunt lacus nulla gravida orci a. Odio nullam varius turpis:</p>
+          <ol class="numbered stagger prose">
+            <li><span>Et commodo pharetra est eros bibendum elit nec luctus. Magna felis sollicitudin mauris integer in.</span></li>
+            <li><span>Mauris eu nibh euismod gravida duis ac tellus et. Risus vulputate vehicula donec lobortis risus a.</span></li>
+            <li><span>Elit etiam tempor ut ullamcorper ligula eu tempor congue. Eros est euismod turpis id tincidunt sapien.</span></li>
+            <li><span>Risus a quam maecenas fermentum consequat mi donec fermentum. Pellentesque malesuada nulla a mi duis sapien sem aliquet nec commodo eget. Consequat quis neque aliquam.</span></li>
+            <li><span>Faucibus lorem ipsum dolor sit amet consectetur adipiscing elit. Sed do eiusmod.</span></li>
+          </ol>
+          <div class="poster" data-reveal="right">
+            <button class="poster-thumb" type="button" data-lightbox data-full="material/affischer/affisch-effektiv-ai-sokning.jpg?v=2" data-pdf="material/affischer/affisch-effektiv-ai-sokning.pdf?v=2" data-title="Affisch: Tips och tricks för effektiv AI-sökning" aria-label="Visa affischen Tips och tricks för effektiv AI-sökning i större format"><img src="assets/img/affisch-effektiv-ai-sokning.jpg?v=2" alt="Affischen Tips och tricks för effektiv AI-sökning" loading="lazy" width="631" height="900"></button>
+            <div class="poster-body">
+              <span class="pill">Affisch att ladda ner</span>
+              <h4>Tips och tricks för effektiv AI-sökning</h4>
+              <p>Tempor incididunt ut labore et dolore magna aliqua ut. Enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea.</p>
+              <div class="btn-row">
+                <a class="btn primary sm" href="material/affischer/affisch-effektiv-ai-sokning.pdf?v=2" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>Ladda ner PDF</a>
+                <a class="btn sm" href="material/affischer/affisch-effektiv-ai-sokning.jpg?v=2" download>Bild (JPG)</a>
+              </div>
+            </div>
+          </div>
+          <p class="prose" data-reveal="up">Commodo consequat duis aute irure dolor in reprehenderit in. Voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat. Cupidatat non proident sunt in culpa qui. Officia deserunt mollit anim id est laborum curabitur pretium tincidunt lacus. Nulla gravida orci a odio nullam varius turpis et commodo pharetra est eros. Bibendum elit nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida duis ac tellus. Et risus vulputate vehicula donec lobortis risus a elit. Etiam tempor ut ullamcorper ligula eu tempor congue eros est euismod turpis. Id tincidunt sapien.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Avslöja</div>
+        <h3 class="block-title">Upptäcka AI-genererat material</h3>
+      </div></div>
+      <div class="block-body">
+        <div class="grid grid-3 stagger">
+          <div class="card feature"><span class="icon-box" aria-hidden="true">🖼️</span><h4>Bilder och video</h4><p>Risus a quam maecenas fermentum consequat mi donec fermentum. Pellentesque malesuada nulla a mi duis sapien sem aliquet nec commodo eget. Consequat quis neque aliquam faucibus lorem ipsum. Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt. Ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud. Exercitation ullamco laboris nisi ut aliquip ex ea. Commodo consequat duis aute irure dolor in reprehenderit in voluptate. Velit esse cillum dolore eu fugiat nulla pariatur excepteur. Sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit. Anim id est laborum curabitur pretium tincidunt. Lacus nulla gravida.</p></div>
+          <div class="card feature"><span class="icon-box" aria-hidden="true">✒️</span><h4>Text</h4><p>Orci a odio nullam varius turpis et commodo pharetra. Est eros bibendum elit nec luctus magna felis sollicitudin mauris integer in. Mauris eu nibh euismod gravida duis ac. Tellus et risus vulputate vehicula donec lobortis risus a elit etiam. Tempor ut ullamcorper ligula eu tempor congue eros est euismod”.</p></div>
+          <div class="card feature"><span class="icon-box" aria-hidden="true">🔬</span><h4>AI-detektorer</h4><p>Turpis id tincidunt sapien risus a quam maecenas fermentum. Consequat mi donec fermentum pellentesque malesuada nulla a mi duis sapien sem. Aliquet nec commodo eget consequat quis neque. Aliquam faucibus lorem ipsum dolor sit amet consectetur adipiscing elit sed. Do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad. Minim veniam quis nostrud exercitation ullamco laboris nisi. Ut aliquip ex ea.</p></div>
+        </div>
+        <div class="links stagger">
+          <a class="link-card" href="assets/video/demo.mp4" target="_blank" rel="noopener"><span class="lc-title">Fejkade vs. äkta AI-videor</span><span class="lc-desc">Commodo consequat duis aute irure dolor in reprehenderit in voluptate.</span></a>
+          <a class="link-card" href="https://sant-eller-ai.lovable.app" target="_blank" rel="noopener"><span class="lc-title">Sant eller AI</span><span class="lc-desc">Velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat.</span></a>
+          <a class="link-card" href="assets/video/demo.mp4" target="_blank" rel="noopener"><span class="lc-title">AI och källkritik</span><span class="lc-desc">Cupidatat non proident sunt in culpa qui officia deserunt. Mollit anim id.</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Workshops</div>
+        <h3 class="block-title">Gör om dem med kollegor</h3>
+      </div></div>
+      <div class="block-body stagger">
+        <div class="acc" id="d2-hallucinationstestet" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">01</span><span class="acc-head"><span class="acc-title">Hallucinationstestet</span><span class="acc-desc">Est laborum curabitur pretium tincidunt lacus nulla gravida orci. A odio nullam varius.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+            <p>Turpis et commodo pharetra est eros bibendum elit nec. Luctus magna felis sollicitudin mauris integer in mauris eu nibh euismod.</p>
+            <ul class="step-list">
+              <li><b>Steg 1</b><div>Gravida duis ac tellus et risus vulputate vehicula donec. Lobortis risus a elit etiam tempor ut ullamcorper ligula eu tempor congue. Eros est euismod turpis id tincidunt sapien. Risus a quam maecenas fermentum consequat mi donec fermentum pellentesque malesuada. Nulla a mi duis sapien.</div></li>
+              <li><b>Steg 2</b><div>Sem aliquet nec commodo eget consequat quis neque aliquam. Faucibus lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod. Tempor incididunt ut labore et dolore magna.</div></li>
+              <li class="reflect"><b>Reflektion</b><div>Aliqua ut enim ad minim veniam quis nostrud exercitation. Ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure. Dolor in reprehenderit?</div></li>
+            </ul>
+            <div class="acc soft"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">💬</span><span class="acc-head"><span class="acc-title">Det här kom grupperna fram till</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>In voluptate velit esse cillum dolore eu fugiat nulla. Pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia. Deserunt mollit anim id est laborum curabitur. Pretium tincidunt lacus nulla gravida orci a odio nullam varius turpis. Et commodo pharetra est eros bibendum elit nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida duis. Ac tellus et risus vulputate vehicula donec lobortis risus a. Elit etiam tempor ut ullamcorper ligula eu tempor congue. Eros est euismod turpis id.</p></div></div></div></div>
+          </div></div></div>
+        </div>
+        <div class="acc" id="d2-fordomsfulla" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">02</span><span class="acc-head"><span class="acc-title">Den fördomsfulla AI</span><span class="acc-desc">Tincidunt sapien risus a quam maecenas fermentum consequat mi donec fermentum.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+            <p>Pellentesque malesuada nulla a mi duis sapien sem aliquet. Nec commodo eget consequat quis neque aliquam faucibus lorem ipsum:</p>
+            <div class="prompts">
+              <p class="prompt"><span class="prompt-label">Promptexempel</span>”Dolor sit amet consectetur adipiscing elit sed”</p>
+              <p class="prompt"><span class="prompt-label">Promptexempel</span>”Do eiusmod tempor incididunt ut labore”</p>
+              <p class="prompt"><span class="prompt-label">Promptexempel</span>”Et dolore magna aliqua”</p>
+            </div>
+            <p>Ut enim ad minim veniam quis nostrud exercitation ullamco. Laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit.</p>
+            <ul class="step-list">
+              <li class="reflect"><b>Reflektion</b><div>In voluptate velit esse cillum dolore eu fugiat nulla. Pariatur excepteur sint occaecat cupidatat non proident sunt in culpa qui officia. Deserunt mollit anim id est laborum curabitur. Pretium tincidunt lacus?</div></li>
+            </ul>
+            <div class="acc soft"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">💬</span><span class="acc-head"><span class="acc-title">Det här kom grupperna fram till</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Nulla gravida orci a odio nullam varius turpis et. Commodo pharetra est eros bibendum elit nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula donec lobortis risus a. Elit etiam tempor ut ullamcorper ligula eu tempor congue eros est euismod turpis. Id tincidunt sapien risus a quam maecenas fermentum. Consequat mi donec fermentum pellentesque malesuada nulla a mi duis. Sapien sem aliquet nec commodo eget.</p></div></div></div></div>
+          </div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">På egen hand</div>
+        <h3 class="block-title">Hemuppgifter</h3>
+        <p>Consequat quis neque aliquam faucibus lorem ipsum dolor sit. Amet consectetur adipiscing.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="table-wrap" data-reveal="up">
+          <table class="t">
+            <caption class="sr-only">Översikt över hemuppgifterna i Del 2</caption>
+            <thead><tr><th>#</th><th>Uppgift</th><th class="hide-sm">Fokusområde</th><th class="hide-sm">Verktyg</th><th><span class="sr-only">Gå till</span></th></tr></thead>
+            <tbody>
+              <tr class="link-row" data-open="d2-hu1"><td class="num">01</td><td>Är det sant?</td><td class="hide-sm">Källkritik &amp; AI:ns medgörlighet</td><td class="hide-sm">Valfri AI-tjänst</td><td class="go">Öppna →</td></tr>
+              <tr class="link-row" data-open="d2-hu2"><td class="num">02</td><td>Föreläsningsförfrågan i disken</td><td class="hide-sm">Sammansatt research: bakgrund, föreläsare, affisch</td><td class="hide-sm">Copilot + valfri deep research-tjänst</td><td class="go">Öppna →</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="stagger">
+          <div class="acc" id="d2-hu1" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">01</span><span class="acc-head"><span class="acc-title">Är det sant? – försök lura AI:n</span><span class="acc-desc">Elit  Sed do eiusmod tempor incididunt</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+              <p>Ut labore et dolore magna aliqua ut enim ad. Minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea. Commodo consequat duis aute.</p>
+              <ul class="step-list">
+                <li><b>Steg 1</b><div>Irure dolor in reprehenderit in voluptate velit esse cillum. Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt. In culpa qui officia.</div></li>
+                <li><b>Steg 2</b><div>Deserunt mollit anim id est laborum curabitur pretium tincidunt. Lacus nulla gravida orci a odio nullam varius turpis et commodo pharetra est.</div></li>
+                <li class="reflect"><b>Reflektion</b><div>Eros bibendum elit nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida duis ac tellus et risus. Vulputate vehicula donec lobortis risus a elit?</div></li>
+              </ul>
+            </div></div></div>
+          </div>
+          <div class="acc" id="d2-hu2" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">02</span><span class="acc-head"><span class="acc-title">Föreläsningsförfrågan i disken</span><span class="acc-desc">Etiam tempor ut ullamcorper ligula eu tempor congue eros est euismod.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+              <div class="scenario"><span class="pill">Scenario</span><p>Turpis id tincidunt sapien risus a quam maecenas fermentum. Consequat mi donec. <strong>fermentum</strong> – pellentesque malesuada nulla a mi duis sapien sem aliquet. Nec commodo eget consequat quis neque aliquam faucibus lorem ipsum dolor sit. Amet consectetur adipiscing elit sed do eiusmod. Tempor incididunt ut labore et dolore magna.</p></div>
+              <div class="callout plain"><p>Aliqua ut enim ad minim veniam quis nostrud exercitation. Ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure. Dolor in reprehenderit in voluptate velit.</p></div>
+              <ul class="step-list">
+                <li><b>Steg 1 – bakgrund</b><div>Esse cillum dolore eu fugiat nulla pariatur excepteur sint. Occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim. Id est laborum curabitur pretium tincidunt lacus. Nulla gravida orci a odio nullam varius turpis et commodo pharetra. Est eros bibendum elit nec luctus magna felis sollicitudin mauris integer in mauris. Eu nibh euismod?</div></li>
+                <li><b>Steg 2 – föreläsare</b><div>Gravida duis ac tellus et risus vulputate vehicula donec. Lobortis risus a elit etiam tempor ut ullamcorper ligula eu tempor congue. Eros est euismod turpis id tincidunt sapien. Risus a quam maecenas fermentum consequat mi donec fermentum pellentesque malesuada. Nulla a mi duis sapien sem aliquet nec.</div></li>
+                <li><b>Frivillig fördjupning</b><div>Commodo eget consequat quis neque aliquam faucibus lorem ipsum. Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut.</div></li>
+              </ul>
+            </div></div></div>
+          </div>
+        </div>
+        <div class="reflection" data-reveal="up">
+          <h4>Reflektera (ta med till nästa tillfälle)</h4>
+          <ul>
+            <li>Labore et dolore magna aliqua ut enim ad minim veniam?</li>
+            <li>Quis nostrud exercitation ullamco?</li>
+            <li>Laboris nisi ut aliquip ex ea commodo consequat duis. Aute irure dolor in?</li>
+            <li>Reprehenderit in voluptate velit esse cillum dolore?</li>
+          </ul>
+        </div>
+        <div class="callout tip" data-reveal="up"><p>💡 eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident. <a href="#bonus">sunt</a>.</p></div>
+      </div>
+    </div>
+
+    <div class="part-foot"><a class="to-top" href="#top">↑ Tillbaka till toppen</a></div>
+  </div>
+</section>
+
+<!-- ═══════════════ DEL 3 ═══════════════ -->
+<section class="part" id="del3" data-part="del3" aria-labelledby="del3-titel">
+  <div class="part-band shelf-bg">
+    <header class="part-head frost">
+      <div>
+        <span class="pill">Del 3 · Tillfälle 3</span>
+        <h2 class="part-title" id="del3-titel">AI och <em>informations&shy;hantering</em></h2>
+        <p class="part-ingress">In culpa qui officia deserunt mollit anim id est. Laborum curabitur pretium tincidunt lacus nulla gravida orci a odio nullam.</p>
+      </div>
+      <div class="part-num" aria-hidden="true">03</div>
+    </header>
+  </div>
+  <div class="part-body">
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Från tillfället</div>
+        <h3 class="block-title">Presentation och inspelning</h3>
+        <p>Varius turpis et commodo pharetra est eros bibendum elit. Nec luctus magna.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="material stagger">
+          <a class="mat-card" href="assets/img/omslag-del3.jpg" data-lightbox data-full="assets/img/omslag-del3.jpg" data-title="Presentation, del 3 (platshållare)">
+            <div class="mat-media"><img src="assets/img/omslag-del3.jpg" alt="Titelbild ur presentationen för Del 3" loading="lazy" width="720" height="405"></div>
+            <div class="mat-body">
+              <div><div class="mat-kind">Presentation</div><div class="mat-title">Presentationen från tillfället</div><div class="mat-meta">Bild · platshållare</div></div>
+              <span class="mat-go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg></span>
+            </div>
+          </a>
+          <div class="mat-card">
+            <div class="video" data-src="assets/video/demo.mp4">
+              <button type="button" aria-label="Spela upp inspelningen från Tillfälle 3"><img src="assets/img/video-poster.jpg" alt="" loading="lazy"><span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
+            </div>
+            <div class="mat-body">
+              <div><div class="mat-kind">Inspelning</div><div class="mat-title">Tillfälle 3 i sin helhet</div><div class="mat-meta">Video · <a href="assets/video/demo.mp4" target="_blank" rel="noopener">öppna i ny flik</a></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Ramar</div>
+        <h3 class="block-title">Lagar, praxis och det du skriver</h3>
+      </div></div>
+      <div class="block-body">
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Fyra lagar att ha koll på</h4>
+          <div class="grid grid-4 stagger">
+            <div class="card feature"><span class="icon-box" aria-hidden="true">🔐</span><h4>GDPR</h4><p>Felis sollicitudin mauris integer in mauris eu nibh euismod. Gravida duis ac tellus et risus vulputate vehicula donec lobortis risus a. Elit etiam tempor ut ullamcorper ligula eu. Tempor congue eros est euismod turpis id tincidunt sapien risus a.</p></div>
+            <div class="card feature"><span class="icon-box" aria-hidden="true">📜</span><h4>Tryckfrihets&shy;förordningen</h4><p>Quam maecenas fermentum consequat mi donec fermentum pellentesque malesuada. Nulla a mi duis sapien sem aliquet nec commodo eget consequat quis. Neque aliquam faucibus lorem ipsum dolor sit. Amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore. Et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris.</p></div>
+            <div class="card feature"><span class="icon-box" aria-hidden="true">📕</span><h4>Lånesekretess</h4><p>Nisi ut aliquip ex ea commodo consequat duis aute. Irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat. Nulla pariatur excepteur sint occaecat cupidatat non. Proident sunt in culpa.</p></div>
+            <div class="card feature"><span class="icon-box" aria-hidden="true">©️</span><h4>Upphovsrätt</h4><p>Qui officia deserunt mollit anim id est laborum curabitur. Pretium tincidunt lacus nulla gravida orci a odio nullam varius turpis et. Commodo pharetra est eros bibendum elit nec. Luctus magna felis sollicitudin mauris integer in mauris eu nibh euismod. Gravida duis ac tellus et risus vulputate vehicula donec lobortis risus a elit etiam tempor.</p></div>
+          </div>
+        </div>
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Så ser praxis ut</h4>
+          <div class="grid grid-2 acc-grid stagger">
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">✅</span><span class="acc-head"><span class="acc-title">Godkända verktyg</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content"><p>Ut ullamcorper ligula eu tempor congue eros est euismod. Turpis id tincidunt sapien risus a quam maecenas fermentum consequat mi donec. Fermentum pellentesque malesuada nulla a mi duis. Sapien sem aliquet nec commodo eget consequat quis neque aliquam faucibus. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">💻</span><span class="acc-head"><span class="acc-title">Fråga IT, och berätta varför</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content"><p>Et dolore magna aliqua ut enim ad minim veniam. Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🧑‍⚖️</span><span class="acc-head"><span class="acc-title">Du bär ansvaret</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content"><p>In reprehenderit in voluptate velit esse cillum dolore eu. Fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa. Qui officia deserunt.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">📷</span><span class="acc-head"><span class="acc-title">Bilder</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content"><p>Mollit anim id est laborum curabitur pretium tincidunt lacus. Nulla gravida orci a odio nullam varius turpis et commodo pharetra est. Eros bibendum elit nec luctus magna felis. Sollicitudin mauris integer in mauris eu nibh euismod gravida duis ac. Tellus et risus vulputate.</p></div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🏷️</span><span class="acc-head"><span class="acc-title">Märkning</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content"><p>Vehicula donec lobortis risus a elit etiam tempor ut. Ullamcorper ligula eu tempor congue eros est euismod turpis id tincidunt sapien. Risus a quam maecenas fermentum consequat mi. Donec fermentum pellentesque malesuada.</p></div></div></div></div>
+          </div>
+        </div>
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Vad händer med det du skriver?</h4>
+          <div class="callout plain prose" data-reveal="up">
+            <p>Nulla a mi duis sapien sem aliquet nec commodo. Eget consequat quis neque aliquam faucibus. <span class="badge-arbete">Lorem</span> ipsum dolor sit amet consectetur adipiscing elit sed do. Eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad. Minim veniam quis nostrud exercitation ullamco.</p>
+            <p>Laboris nisi ut aliquip ex ea commodo consequat duis. Aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu. Fugiat nulla pariatur excepteur sint occaecat cupidatat. Non proident sunt in culpa qui officia deserunt mollit anim id. Est laborum curabitur pretium tincidunt lacus nulla gravida orci a odio nullam varius. Turpis et commodo pharetra est eros bibendum elit. Nec luctus magna felis sollicitudin mauris integer in mauris eu. Nibh euismod gravida duis ac tellus et risus vulputate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block" id="d3-klassificering" data-task>
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Workshop · grupper om 2–3 personer</div>
+        <h3 class="block-title">Informations&shy;klassificering</h3>
+      </div></div>
+      <div class="block-body">
+        <div class="scenario" data-reveal="up"><span class="pill">Mål med övningen</span><p>Vehicula donec lobortis risus a elit etiam tempor ut. Ullamcorper ligula eu tempor congue eros est euismod turpis id tincidunt sapien. Risus a quam maecenas fermentum consequat mi. Donec fermentum pellentesque malesuada nulla a mi duis sapien sem aliquet nec.</p></div>
+        <div class="grid grid-3 stagger">
+          <div class="card feature"><span class="icon-box" aria-hidden="true"><b>1</b></span><h4>Läs exempeltexterna</h4><p>Commodo eget consequat quis neque aliquam faucibus lorem ipsum. Dolor sit amet consectetur adipiscing elit sed do eiusmod tempor.</p></div>
+          <div class="card feature"><span class="icon-box" aria-hidden="true"><b>2</b></span><h4>Diskutera och bedöm risknivå</h4><p>Incididunt ut labore et dolore magna aliqua ut enim. Ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo?</p></div>
+          <div class="card feature"><span class="icon-box" aria-hidden="true"><b>3</b></span><h4>Registrera era svar</h4><p>Consequat duis aute irure dolor <a href="https://forms.gle/Vcm5hk1t8dMSfB529" target="_blank" rel="noopener">In reprehenderit in voluptate</a>.</p></div>
+        </div>
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">MSB:s klassificeringsnivåer – er guide under övningen</h4>
+          <div class="ladder stagger">
+            <div class="ladder-row" data-n="0" style="--n: 0"><div class="lv">Velit<b>0</b></div><div><h5>Försumbar</h5><p>Esse cillum dolore eu fugiat nulla pariatur excepteur sint. Occaecat cupidatat non proident.</p></div></div>
+            <div class="ladder-row" data-n="1" style="--n: 1"><div class="lv">Sunt<b>1</b></div><div><h5>Måttlig</h5><p>In culpa qui officia deserunt mollit anim id est. Laborum curabitur pretium tincidunt lacus nulla gravida orci a odio nullam varius. Turpis et commodo pharetra est eros bibendum. Elit nec luctus magna felis sollicitudin mauris integer in.</p></div></div>
+            <div class="ladder-row" data-n="2" style="--n: 2"><div class="lv">Mauris<b>2</b></div><div><h5>Betydande</h5><p>Eu nibh euismod gravida duis ac tellus et risus. Vulputate vehicula donec lobortis risus a elit etiam tempor.</p></div></div>
+            <div class="ladder-row" data-n="3" style="--n: 3"><div class="lv">Ut<b>3</b></div><div><h5>Allvarlig</h5><p>Ullamcorper ligula eu tempor congue eros est euismod turpis. Id tincidunt sapien risus a quam maecenas fermentum consequat mi.</p></div></div>
+          </div>
+        </div>
+        <div class="acc soft" data-reveal="up"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">💬</span><span class="acc-head"><span class="acc-title">Det här kom grupperna fram till</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+            <p>Donec fermentum pellentesque malesuada nulla a mi duis sapien. Sem aliquet nec commodo eget consequat quis neque aliquam faucibus lorem ipsum. Dolor sit amet consectetur adipiscing elit sed. Do eiusmod tempor incididunt ut labore et dolore magna aliqua ut. Enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex. Ea commodo consequat duis aute irure dolor in. Reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla. Pariatur excepteur sint occaecat cupidatat non proident sunt in. Culpa qui officia deserunt mollit anim id est laborum curabitur pretium tincidunt. Lacus nulla gravida.</p>
+            <p>Orci a odio nullam varius turpis et commodo pharetra. Est eros bibendum elit nec luctus magna felis sollicitudin mauris integer in. Mauris eu nibh euismod gravida duis ac. Tellus et risus vulputate vehicula donec lobortis risus a elit etiam. Tempor ut ullamcorper ligula eu tempor congue eros est euismod turpis id tincidunt. Sapien risus a quam maecenas fermentum consequat mi. Donec fermentum pellentesque malesuada nulla a mi duis sapien sem. Aliquet nec commodo eget consequat quis neque aliquam faucibus. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor. Incididunt ut labore et dolore magna.</p>
+          </div></div></div>
+        </div>
+        <div class="callout" data-reveal="up"><p class="callout-title">Offentlighetsprincipen i praktiken</p><p>Aliqua ut enim ad minim veniam quis nostrud exercitation. Ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure. Dolor in reprehenderit in voluptate velit esse. Cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non. Proident sunt in culpa qui officia deserunt mollit anim id est laborum curabitur. Pretium tincidunt lacus nulla gravida orci.</p></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">NotebookLM</div>
+        <h3 class="block-title">Svara på frågor utifrån dina egna dokument</h3>
+      </div></div>
+      <div class="block-body">
+        <div class="prose cols-2" data-reveal="up">
+          <p>A odio nullam varius turpis et commodo pharetra est. Eros bibendum elit nec luctus magna felis sollicitudin mauris integer in mauris. Eu nibh euismod gravida duis ac tellus. Et risus vulputate vehicula donec lobortis risus a elit etiam tempor. Ut ullamcorper ligula eu tempor congue eros est euismod turpis id tincidunt sapien. Risus a quam maecenas fermentum consequat mi donec fermentum pellentesque.</p>
+          <p>Malesuada nulla a mi duis sapien sem aliquet nec. Commodo eget consequat quis neque aliquam faucibus lorem ipsum dolor sit amet. Consectetur adipiscing elit sed do eiusmod tempor. Incididunt ut labore et dolore magna aliqua ut enim ad minim. Veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate. Velit esse cillum dolore eu fugiat nulla pariatur excepteur sint. Occaecat cupidatat non proident sunt in culpa qui officia.</p>
+        </div>
+
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Så kommer du igång</h4>
+          <ol class="numbered stagger prose">
+            <li><span>Deserunt mollit anim id est laborum curabitur pretium tincidunt.</span></li>
+            <li><span>Lacus nulla gravida orci.</span></li>
+            <li><span>A odio nullam varius turpis et commodo pharetra est eros bibendum.</span></li>
+            <li><span>Elit nec luctus magna felis sollicitudin mauris integer in. Mauris eu nibh euismod gravida duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit etiam tempor ut ullamcorper.</span></li>
+            <li><span>Ligula eu tempor congue eros est euismod.</span></li>
+          </ol>
+          <div class="material stagger">
+            <div class="mat-card">
+              <div class="video" data-src="assets/video/demo.mp4">
+                <button type="button" aria-label="Spela upp videon Så här skaffar du ett extra Googlekonto för NotebookLM"><img src="assets/img/video-poster.jpg" alt="" loading="lazy"><span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
+              </div>
+              <div class="mat-body"><div><div class="mat-kind">Instruktionsvideo 1</div><div class="mat-title">Så skaffar du ett extra Google-konto för NotebookLM</div><div class="mat-meta"><a href="assets/video/demo.mp4" target="_blank" rel="noopener">Öppna i ny flik</a></div></div></div>
+            </div>
+            <div class="mat-card">
+              <div class="video" data-src="assets/video/demo.mp4">
+                <button type="button" aria-label="Spela upp videon Hur skapar du en sökbar manual i NotebookLM"><img src="assets/img/video-poster.jpg" alt="" loading="lazy"><span class="play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button>
+              </div>
+              <div class="mat-body"><div><div class="mat-kind">Instruktionsvideo 2</div><div class="mat-title">Så skapar du en sökbar manual i NotebookLM</div><div class="mat-meta"><a href="assets/video/demo.mp4" target="_blank" rel="noopener">Öppna i ny flik</a></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Så har jag använt det</h4>
+          <div class="grid grid-3 acc-grid stagger">
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🗒️</span><span class="acc-head"><span class="acc-title">Mötesprotokoll</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Turpis id tincidunt sapien risus a quam maecenas fermentum. Consequat mi donec fermentum pellentesque malesuada nulla a mi duis sapien sem aliquet.</p></div></div></div></div>
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">📘</span><span class="acc-head"><span class="acc-title">Användarhandböcker</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Nec commodo eget consequat quis neque aliquam faucibus lorem. Ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt. Ut labore et dolore magna aliqua ut. Enim ad minim veniam quis.</p></div></div></div></div>
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🤝</span><span class="acc-head"><span class="acc-title">Rutinbot</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Nostrud exercitation ullamco laboris nisi ut aliquip ex ea. Commodo consequat duis aute irure dolor in reprehenderit in voluptate velit esse. Cillum dolore eu fugiat nulla pariatur excepteur. Sint occaecat cupidatat non proident sunt in culpa qui officia deserunt. Mollit anim id est laborum curabitur pretium tincidunt.</p></div></div></div></div>
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🎙️</span><span class="acc-head"><span class="acc-title">Handskrift och ljud</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Lacus nulla gravida orci a odio nullam varius turpis. Et commodo pharetra est eros bibendum elit nec luctus magna felis sollicitudin. Mauris integer in mauris eu nibh euismod. Gravida duis ac tellus et risus vulputate vehicula donec lobortis risus. A elit etiam tempor ut ullamcorper ligula eu tempor congue eros est euismod. Turpis id tincidunt sapien risus a.</p></div></div></div></div>
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🔎</span><span class="acc-head"><span class="acc-title">Egen informationssökning</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Quam maecenas fermentum consequat mi donec fermentum pellentesque malesuada. Nulla a mi duis sapien sem aliquet nec commodo eget consequat quis. Neque aliquam faucibus lorem ipsum dolor sit. Amet consectetur adipiscing elit.</p></div></div></div></div>
+              <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🎧</span><span class="acc-head"><span class="acc-title">Studio</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+                <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Sed do eiusmod tempor incididunt ut labore et dolore. Magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris. Nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</p><p>Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat. Non proident sunt in culpa qui officia deserunt mollit anim id.</p></div></div></div></div>
+            </div>
+          <div class="callout tip" data-reveal="up"><p><strong>Est!</strong> Laborum curabitur pretium tincidunt lacus nulla gravida orci a odio nullam.</p></div>
+        </div>
+
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Vilken tjänst till vad?</h4>
+          <div class="grid grid-3 stagger">
+            <div class="card feature"><span class="icon-box" aria-hidden="true">✍️</span><h4>Text och idéer</h4><p>Varius turpis et.</p></div>
+            <div class="card feature"><span class="icon-box" aria-hidden="true">🔍</span><h4>Söka information</h4><p>Commodo pharetra est eros bibendum elit nec luctus magna. Felis sollicitudin mauris integer in mauris eu nibh euismod gravida duis ac tellus.</p></div>
+            <div class="card feature"><span class="icon-box" aria-hidden="true">🗃️</span><h4>Organisera information</h4><p>Et.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Utåt mot låntagarna</div>
+        <h3 class="block-title">Tre saker att lära ut, sex aktiviteter att välja bland</h3>
+      </div></div>
+      <div class="block-body">
+        <p class="prose" data-reveal="up">Risus vulputate vehicula donec lobortis risus a elit etiam. Tempor ut ullamcorper ligula eu tempor congue eros est euismod turpis id. Tincidunt sapien risus a quam maecenas fermentum. Consequat mi donec fermentum pellentesque malesuada nulla a mi duis sapien. Sem aliquet nec commodo eget consequat quis neque aliquam:</p>
+        <div class="grid grid-3 stagger">
+          <div class="card feature"><span class="icon-box" aria-hidden="true">🌀</span><h4>Hallucinationer</h4><p>Faucibus lorem ipsum dolor sit amet consectetur adipiscing.</p></div>
+          <div class="card feature"><span class="icon-box" aria-hidden="true">⚖️</span><h4>Bias</h4><p>Elit sed do eiusmod tempor incididunt ut labore et.</p></div>
+          <div class="card feature"><span class="icon-box" aria-hidden="true">🪞</span><h4>Vilseledande tonalitet</h4><p>Dolore magna aliqua ut enim ad minim veniam quis. Nostrud exercitation ullamco.</p></div>
+        </div>
+        <p class="prose" data-reveal="up"><a href="#sok-battre">Laboris</a> nisi <a href="#kallkritik-ai-eran">ut</a> aliquip ex ea commodo consequat duis aute irure dolor. In reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident sunt. In culpa qui officia deserunt mollit anim id est laborum curabitur. Pretium tincidunt lacus nulla gravida orci a odio nullam varius turpis et commodo pharetra est. <a href="#bonus">eros</a>.</p>
+        <div class="grid grid-3 acc-grid stagger">
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">01</span><span class="acc-head"><span class="acc-title">Folkbildning: Vem är rädd för AI?</span><span class="acc-desc">Bibendum elit nec luctus magna felis sollicitudin mauris integer in.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+                <p>Mauris eu nibh euismod gravida duis ac tellus et. Risus vulputate vehicula donec lobortis risus a elit etiam tempor ut ullamcorper. Ligula eu tempor congue eros est euismod. Turpis id tincidunt sapien risus a quam maecenas fermentum consequat mi. Donec fermentum pellentesque malesuada nulla a mi duis sapien sem aliquet nec commodo. Eget consequat quis neque aliquam faucibus lorem ipsum dolor sit.</p>
+                <ul class="step-list">
+                  <li><b>Mediemedveten</b><div>Amet <a href="https://mediemedveten.se/" target="_blank" rel="noopener">consectetur</a> adipiscing elit sed do eiusmod tempor incididunt ut labore. Et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation. Ullamco laboris nisi ut aliquip ex ea. Commodo consequat duis aute irure dolor in reprehenderit in voluptate velit. Esse cillum dolore eu fugiat nulla.</div></li>
+                  <li><b>Elements of AI</b><div>Pariatur excepteur sint <a href="https://course.elementsofai.com/se/" target="_blank" rel="noopener">Occaecat cupidatat non</a> proident sunt in culpa qui officia deserunt mollit anim. Id est laborum curabitur pretium tincidunt lacus nulla gravida orci a odio. Nullam varius turpis et commodo pharetra est. Eros bibendum elit nec luctus magna felis sollicitudin mauris integer in. Mauris eu nibh euismod gravida.</div></li>
+                </ul>
+              </div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">02</span><span class="acc-head"><span class="acc-title">Skapande: Från högläsning till omslagsbild</span><span class="acc-desc">Duis ac tellus et risus vulputate vehicula donec lobortis. Risus a elit etiam.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+                <ol class="numbered">
+                  <li><span>Tempor ut ullamcorper ligula eu tempor.</span></li>
+                  <li><span>Congue eros est euismod turpis id tincidunt sapien.</span></li>
+                  <li><span>Risus a quam maecenas fermentum consequat mi donec fermentum. Pellentesque malesuada nulla a mi duis sapien sem aliquet nec commodo eget consequat.</span></li>
+                  <li><span>Quis neque aliquam faucibus lorem ipsum dolor sit amet consectetur.</span></li>
+                </ol>
+                <p>Adipiscing elit sed do eiusmod tempor incididunt ut labore et. <em>Dolore magna aliqua ut enim ad</em> minim veniam quis nostrud exercitation ullamco laboris nisi ut. Aliquip ex ea commodo consequat duis aute irure dolor in reprehenderit in. Voluptate velit esse cillum dolore eu fugiat. Nulla pariatur excepteur sint occaecat cupidatat non proident sunt in culpa. Qui officia deserunt mollit anim id est laborum curabitur pretium tincidunt lacus nulla. Gravida orci a odio nullam.</p>
+              </div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">03</span><span class="acc-head"><span class="acc-title">Demokrati: Den källkritiska fejkade tipspromenaden</span><span class="acc-desc">Varius turpis et commodo pharetra est eros bibendum elit.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+                <ol class="numbered">
+                  <li><span>Nec luctus magna felis sollicitudin mauris.</span></li>
+                  <li><span>Integer in mauris eu nibh euismod gravida duis ac. Tellus et risus vulputate vehicula donec lobortis risus a elit etiam tempor. Ut ullamcorper ligula eu tempor congue.</span></li>
+                  <li><span>Eros est euismod turpis id tincidunt sapien risus a. Quam maecenas fermentum consequat mi donec fermentum pellentesque malesuada?</span></li>
+                </ol>
+                <p>Nulla a mi duis sapien sem aliquet nec commodo. Eget consequat quis neque aliquam faucibus lorem ipsum dolor sit amet consectetur. Adipiscing elit sed do eiusmod tempor incididunt. Ut labore et dolore magna aliqua ut enim ad minim veniam. Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis. Aute irure dolor in reprehenderit in voluptate velit. Esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat. Cupidatat non proident sunt in culpa qui officia deserunt. Mollit anim id est laborum curabitur pretium tincidunt lacus nulla gravida orci. A odio nullam varius turpis et.</p>
+              </div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">04</span><span class="acc-head"><span class="acc-title">Hallucinationsjakten</span><span class="acc-desc">Commodo pharetra est eros bibendum elit nec luctus magna felis.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+                <p>Sollicitudin mauris integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula donec lobortis risus a elit. Etiam tempor ut ullamcorper ligula eu tempor. Congue eros est euismod turpis id tincidunt sapien risus a quam. Maecenas fermentum consequat mi donec fermentum pellentesque malesuada nulla a mi duis sapien sem aliquet.</p>
+                <p class="small">Nec <a href="#d2-hallucinationstestet">Commodo eget consequat quis</a>.</p>
+              </div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">05</span><span class="acc-head"><span class="acc-title">Den fördomsfulla AI på storbild</span><span class="acc-desc">Neque aliquam faucibus lorem ipsum dolor sit amet consectetur adipiscing elit.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+                <p>Sed do eiusmod tempor incididunt ut labore et dolore. Magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris. Nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum. Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident.</p>
+              </div></div></div></div>
+            <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-num">06</span><span class="acc-head"><span class="acc-title">Övertyga AI:n</span><span class="acc-desc">Sunt in culpa qui officia deserunt mollit anim id. Est laborum curabitur pretium tincidunt lacus.</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush">
+                <p>Nulla gravida orci a odio nullam varius turpis et. Commodo pharetra est eros bibendum elit nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula.</p>
+                <ol class="numbered">
+                  <li><span>Donec lobortis risus a elit etiam tempor ut ullamcorper. Ligula eu tempor congue eros est euismod turpis id tincidunt sapien risus. A quam maecenas fermentum.</span></li>
+                  <li><span>Consequat mi donec fermentum pellentesque malesuada nulla a mi. Duis sapien sem aliquet nec commodo eget consequat quis neque aliquam faucibus. Lorem ipsum dolor sit amet consectetur adipiscing. Elit sed do eiusmod tempor.</span></li>
+                  <li><span>Incididunt ut labore et dolore magna aliqua ut enim. Ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex. Ea commodo consequat duis aute irure dolor. In reprehenderit in voluptate velit.</span></li>
+                </ol>
+                <p>Esse cillum dolore eu fugiat nulla pariatur excepteur sint. Occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim. Id est laborum curabitur pretium tincidunt lacus. Nulla gravida orci a odio nullam varius turpis et commodo.</p>
+              </div></div></div></div>
+          </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Workshop</div>
+        <h3 class="block-title">Den fejkade tipspromenaden</h3>
+      </div></div>
+      <div class="block-body stagger">
+        <div class="acc" id="d3-fejka" data-task><button class="acc-btn" aria-expanded="false"><span class="acc-num">01</span><span class="acc-head"><span class="acc-title">Fejka ditt eget bibliotek</span><span class="acc-desc">Pharetra est eros bibendum elit nec</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+          <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+            <p>Luctus magna felis sollicitudin mauris integer in mauris eu. Nibh euismod gravida duis ac tellus et risus vulputate.</p>
+            <ul class="step-list">
+              <li><b>Steg 1</b><div>Vehicula donec lobortis risus a elit etiam tempor ut ullamcorper.</div></li>
+              <li><b>Steg 2</b><div><p>Ligula eu tempor congue eros est euismod turpis id. Tincidunt sapien risus a quam:</p><p class="prompt"><span class="prompt-label">Prompt</span>”Maecenas fermentum consequat mi donec fermentum pellentesque malesuada nulla. A mi duis sapien sem aliquet.”</p><p>Nec commodo eget consequat quis neque aliquam faucibus lorem. Ipsum dolor sit.</p></div></li>
+              <li><b>Steg 3</b><div>Amet consectetur adipiscing elit sed do eiusmod tempor incididunt. Ut labore et dolore magna aliqua ut enim ad minim.</div></li>
+              <li class="reflect"><b>Reflektion</b><div>Veniam quis nostrud exercitation ullamco laboris nisi ut aliquip. Ex ea commodo consequat duis aute irure dolor in reprehenderit in?</div></li>
+            </ul>
+            <div class="acc soft"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">💬</span><span class="acc-head"><span class="acc-title">Det här kom grupperna fram till</span></span><span class="acc-icon" aria-hidden="true"></span></button>
+              <div class="acc-panel"><div class="acc-inner"><div class="acc-content flush"><p>Voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt. Mollit anim id est laborum curabitur pretium. Tincidunt lacus nulla gravida orci a odio nullam varius turpis et. Commodo pharetra est eros bibendum elit nec luctus magna felis sollicitudin mauris integer. In mauris eu nibh euismod gravida duis ac. Tellus et risus vulputate vehicula donec lobortis risus.</p></div></div></div></div>
+          </div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block" id="d3-notebook" data-task>
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">På egen hand</div>
+        <h3 class="block-title">Hemuppgift – Skapa din egen notebook</h3>
+      </div></div>
+      <div class="block-body">
+        <p class="prose" data-reveal="up">A elit etiam tempor ut <a href="https://notebooklm.google.com" target="_blank" rel="noopener">Ullamcorper</a>. ligula eu tempor congue eros est euismod turpis id. Tincidunt sapien risus a quam maecenas fermentum consequat mi donec fermentum pellentesque. Malesuada nulla a mi duis sapien sem aliquet nec.</p>
+        <div class="callout plain" data-reveal="up"><p><strong>Commodo eget:</strong> Consequat quis neque aliquam faucibus lorem ipsum dolor sit. Amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et. Dolore magna aliqua ut enim ad minim veniam quis).</p></div>
+        <div class="reflection" data-reveal="up">
+          <h4>Reflektera</h4>
+          <ul>
+            <li>Nostrud exercitation ullamco laboris nisi ut aliquip ex ea. Commodo consequat duis aute irure?</li>
+            <li>Dolor in reprehenderit in voluptate velit esse?</li>
+          </ul>
+        </div>
+        <div class="callout tip" data-reveal="up"><p>💡 cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat. <a href="#bonus">non</a> proident sunt in culpa qui officia deserunt mollit anim.</p></div>
+        <div class="callout cta" data-reveal="scale">
+          <p class="callout-title">Tack för att du var med!</p>
+          <p>Id est laborum curabitur pretium tincidunt lacus nulla gravida. Orci a odio nullam varius turpis et commodo pharetra est eros bibendum. Elit nec luctus magna felis sollicitudin mauris integer. <a href="mailto:vidar.kjerstadius@gmail.com">in mauris</a>, eu nibh euismod.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="part-foot"><a class="to-top" href="#top">↑ Tillbaka till toppen</a></div>
+  </div>
+</section>
+
+<!-- ═══════════════ BONUS ═══════════════ -->
+<section class="part" id="bonus" data-part="bonus" aria-labelledby="bonus-titel">
+  <div class="part-band shelf-bg">
+    <header class="part-head frost">
+      <div>
+        <span class="pill">Bonus · På egen hand</span>
+        <h2 class="part-title" id="bonus-titel">Program&shy;verksamhet med <em>AI</em></h2>
+        <p class="part-ingress">Gravida duis ac tellus et risus vulputate vehicula donec. Lobortis risus a elit etiam tempor ut ullamcorper.</p>
+      </div>
+      <div class="part-num" aria-hidden="true">+</div>
+    </header>
+  </div>
+  <div class="part-body">
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Programidéer</div>
+        <h3 class="block-title">Fyra aktiviteter att prova</h3>
+        <p>Ligula eu tempor congue eros est euismod turpis id tincidunt sapien.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="grid grid-2 acc-grid stagger">
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">📖</span><span class="acc-head"><span class="acc-title">För vuxna: Den oändliga novellen</span><span class="acc-desc">Risus a quam maecenas fermentum consequat.</span><span class="prog-tags"><span>⏱ mi donec</span><span>🎯 fermentum</span><span>📺 pellentesque</span><span>🤖 malesuada nulla a mi</span></span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+              <ul class="step-list">
+                <li><b>Interagera</b><div>Duis sapien sem aliquet nec commodo eget consequat quis. Neque aliquam faucibus lorem ipsum dolor sit amet consectetur adipiscing elit sed. Do eiusmod tempor incididunt ut labore et. Dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation”.</div></li>
+                <li><b>Diskutera och spela</b><div>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</div></li>
+              </ul>
+            </div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🖍️</span><span class="acc-head"><span class="acc-title">AI och serier: Från streckgubbar till konst</span><span class="acc-desc">Dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat”.</span><span class="prog-tags"><span>⏱ non proident sunt</span><span>🎯 in culpa</span><span>✏️ qui</span><span>🤖 officia deserunt mollit anim</span></span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+              <ul class="step-list">
+                <li><b>Skissa</b><div>Id est laborum curabitur pretium tincidunt lacus nulla.</div></li>
+                <li><b>Beskriv</b><div>Gravida orci a odio nullam varius.</div></li>
+                <li><b>Prompta</b><div>Turpis et commodo pharetra est eros bibendum elit nec. Luctus magna felis sollicitudin mauris integer in mauris eu nibh euismod gravida.</div></li>
+                <li><b>Resultat</b><div>Duis ac tellus et risus vulputate!</div></li>
+              </ul>
+            </div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🎨</span><span class="acc-head"><span class="acc-title">Den digitala ateljén (drop-in eller stationer)</span><span class="acc-desc">Vehicula donec lobortis risus a.</span><span class="prog-tags"><span>⏱ elit etiam</span><span>🎯 tempor</span><span>🖼 ut ullamcorper</span><span>🎵 ligula eu</span></span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+              <p>Tempor congue eros est euismod turpis id tincidunt sapien. Risus a quam maecenas fermentum consequat mi donec fermentum pellentesque malesuada nulla. A mi duis sapien sem aliquet nec. Commodo eget consequat quis neque aliquam faucibus lorem ipsum dolor sit. Amet consectetur adipiscing elit sed do.</p>
+            </div></div></div></div>
+          <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="acc-emoji" aria-hidden="true">🎤</span><span class="acc-head"><span class="acc-title">AI-poesi: Från text till ton</span><span class="acc-desc">Eiusmod tempor incididunt ut.</span><span class="prog-tags"><span>⏱ labore et dolore</span><span>🎯 magna</span><span>🤖 aliqua ut enim ad</span><span>🎵 minim veniam</span></span></span><span class="acc-icon" aria-hidden="true"></span></button>
+            <div class="acc-panel"><div class="acc-inner"><div class="acc-content">
+              <ul class="step-list">
+                <li><b>Skriv</b><div>Quis nostrud exercitation ullamco laboris nisi.</div></li>
+                <li><b>Iterera</b><div>Ut aliquip ex ea commodo consequat duis aute irure dolor.</div></li>
+                <li><b>Musiksätt</b><div>In reprehenderit in voluptate velit esse cillum dolore eu).</div></li>
+                <li><b>Producera</b><div>Fugiat nulla pariatur excepteur sint occaecat cupidatat non proident. Sunt in culpa qui.</div></li>
+              </ul>
+            </div></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="part-foot"><a class="to-top" href="#top">↑ Tillbaka till toppen</a></div>
+  </div>
+</section>
+
+<!-- ═══════════════ RESURSER ═══════════════ -->
+<section class="part" id="resurser" data-part="res" aria-labelledby="res-titel">
+  <div class="part-band shelf-bg">
+    <header class="part-head frost">
+      <div>
+        <span class="pill">Ta med hem</span>
+        <h2 class="part-title" id="res-titel">Resurser &amp; <em>vidare läsning</em></h2>
+        <p class="part-ingress">Officia deserunt mollit anim id est <a href="https://aifolkbildaren.se" target="_blank" rel="noopener">laborum</a></p>
+      </div>
+      <div class="part-num" aria-hidden="true">→</div>
+    </header>
+  </div>
+  <div class="part-body">
+
+    <div class="block" id="material">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Materialhyllan</div>
+        <h3 class="block-title">Allt material samlat</h3>
+        <p>Curabitur pretium tincidunt lacus nulla gravida orci a odio. Nullam varius turpis et commodo pharetra est eros bibendum elit nec luctus. Magna felis sollicitudin mauris integer.</p>
+      </div></div>
+      <div class="block-body">
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Affischer att ladda ner</h4>
+          <div class="poster-wall stagger">
+            <div class="poster-tile">
+              <button class="poster-thumb" type="button" data-lightbox data-full="material/affischer/affisch-pragmatiska-beslutsmodellen.jpg" data-pdf="material/affischer/affisch-pragmatiska-beslutsmodellen.pdf" data-title="Affisch: AI vid informationssökning – Den pragmatiska beslutsmodellen" aria-label="Visa affischen Den pragmatiska beslutsmodellen i större format"><img src="assets/img/affisch-pragmatiska-beslutsmodellen.jpg" alt="Affischen AI vid informationssökning – Den pragmatiska beslutsmodellen" loading="lazy" width="637" height="900"></button>
+              <h4>Den pragmatiska beslutsmodellen</h4>
+              <div class="btn-row"><a class="btn primary sm" href="material/affischer/affisch-pragmatiska-beslutsmodellen.pdf" download>PDF</a><a class="btn sm" href="material/affischer/affisch-pragmatiska-beslutsmodellen.jpg" download>JPG</a></div>
+            </div>
+            <div class="poster-tile">
+              <button class="poster-thumb" type="button" data-lightbox data-full="material/affischer/affisch-kallkritik-i-ai-eran.jpg?v=2" data-pdf="material/affischer/affisch-kallkritik-i-ai-eran.pdf?v=2" data-title="Affisch: Källkritik i AI-eran – En ny tolkning" aria-label="Visa affischen Källkritik i AI-eran i större format"><img src="assets/img/affisch-kallkritik-i-ai-eran.jpg?v=2" alt="Affischen Källkritik i AI-eran – En ny tolkning" loading="lazy" width="640" height="857"></button>
+              <h4>Källkritik i AI-eran</h4>
+              <div class="btn-row"><a class="btn primary sm" href="material/affischer/affisch-kallkritik-i-ai-eran.pdf?v=2" download>PDF</a><a class="btn sm" href="material/affischer/affisch-kallkritik-i-ai-eran.jpg?v=2" download>JPG</a></div>
+            </div>
+            <div class="poster-tile">
+              <button class="poster-thumb" type="button" data-lightbox data-full="material/affischer/affisch-effektiv-ai-sokning.jpg?v=2" data-pdf="material/affischer/affisch-effektiv-ai-sokning.pdf?v=2" data-title="Affisch: Tips och tricks för effektiv AI-sökning" aria-label="Visa affischen Tips och tricks för effektiv AI-sökning i större format"><img src="assets/img/affisch-effektiv-ai-sokning.jpg?v=2" alt="Affischen Tips och tricks för effektiv AI-sökning" loading="lazy" width="631" height="900"></button>
+              <h4>Tips och tricks för effektiv AI-sökning</h4>
+              <div class="btn-row"><a class="btn primary sm" href="material/affischer/affisch-effektiv-ai-sokning.pdf?v=2" download>PDF</a><a class="btn sm" href="material/affischer/affisch-effektiv-ai-sokning.jpg?v=2" download>JPG</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Presentationer</h4>
+          <div class="links stagger">
+            <a class="link-card dl" href="assets/img/omslag-del1.jpg" data-lightbox data-full="assets/img/omslag-del1.jpg" data-title="Presentation, del 1 (platshållare)"><span class="lc-title">Del 1 – Praktisk introduktion till generativ AI</span><span class="lc-desc">In mauris eu nibh</span></a>
+            <a class="link-card dl" href="assets/img/omslag-del2.jpg" data-lightbox data-full="assets/img/omslag-del2.jpg" data-title="Presentation, del 2 (platshållare)"><span class="lc-title">Del 2 – Informationssökning och AI</span><span class="lc-desc">Euismod gravida duis ac</span></a>
+            <a class="link-card dl" href="assets/img/omslag-del3.jpg" data-lightbox data-full="assets/img/omslag-del3.jpg" data-title="Presentation, del 3 (platshållare)"><span class="lc-title">Del 3 – AI och informationshantering</span><span class="lc-desc">Tellus et risus vulputate</span></a>
+          </div>
+        </div>
+        <div class="subblock">
+          <h4 class="h3" data-reveal="up">Inspelningar</h4>
+          <div class="links stagger">
+            <a class="link-card" href="assets/video/demo.mp4" target="_blank" rel="noopener"><span class="lc-title">Tillfälle 1</span><span class="lc-desc">Vehicula donec lobortis risus a elit etiam tempor ut ullamcorper ligula.</span></a>
+            <a class="link-card" href="assets/video/demo.mp4" target="_blank" rel="noopener"><span class="lc-title">Tillfälle 2</span><span class="lc-desc">Eu tempor congue eros est</span></a>
+            <a class="link-card" href="assets/video/demo.mp4" target="_blank" rel="noopener"><span class="lc-title">Tillfälle 3</span><span class="lc-desc">Euismod turpis id tincidunt sapien risus a.</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Läsa vidare</div>
+        <h3 class="block-title">Artiklar på Digiteket</h3>
+      </div></div>
+      <div class="block-body">
+        <div class="links stagger">
+          <a class="link-card" href="https://digiteket.se/kurs/en-praktisk-introduktion-till-generativ-ai-chatgpt-gemini-och-copilot/" target="_blank" rel="noopener"><span class="lc-title">En praktisk introduktion till generativ AI</span><span class="lc-desc">Quam maecenas fermentum consequat mi donec fermentum pellentesque malesuada. Nulla a mi.</span></a>
+          <a class="link-card" href="https://digiteket.se/kurs/perplexity-levla-upp-ditt-referensarbete/" target="_blank" rel="noopener"><span class="lc-title">Perplexity – Levla upp ditt referensarbete</span><span class="lc-desc">Duis sapien sem aliquet nec commodo eget consequat.</span></a>
+          <a class="link-card" href="https://digiteket.se/kurs/notebooklm-chatta-med-din-data/" target="_blank" rel="noopener"><span class="lc-title">NotebookLM – chatta med din data</span><span class="lc-desc">Quis neque aliquam faucibus lorem ipsum dolor sit.</span></a>
+          <a class="link-card" href="https://digiteket.se/kurs/ner-i-kaninhalet-starta-din-egen-studiecirkel-om-ai/" target="_blank" rel="noopener"><span class="lc-title">Ner i kaninhålet – Starta din egen studiecirkel om AI</span><span class="lc-desc">Amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut.</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Prompter</div>
+        <h3 class="block-title">Promptbibliotek</h3>
+      </div></div>
+      <div class="block-body">
+        <div class="links stagger">
+          <a class="link-card" href="https://aifolkbildaren.se/promptbibliotek-och-resurser-real/" target="_blank" rel="noopener"><span class="lc-title">aifolkbildaren.se – Promptbibliotek &amp; resurser</span><span class="lc-desc">Labore et dolore magna aliqua ut enim ad minim veniam quis.</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-rail"><div class="block-rail-inner" data-reveal="left">
+        <div class="block-kicker">Verktyg</div>
+        <h3 class="block-title">Verktyg &amp; lärresurser</h3>
+      </div></div>
+      <div class="block-body">
+        <div class="links stagger">
+          <a class="link-card" href="https://internetkunskap.se/artiklar/grundkurs-i-ai/kom-igang-med-ai-guide-for-dig-som-ar-nyborjare/" target="_blank" rel="noopener"><span class="lc-title">Kom igång med AI</span><span class="lc-desc">Nostrud exercitation ullamco laboris</span></a>
+          <a class="link-card" href="https://course.elementsofai.com/se/" target="_blank" rel="noopener"><span class="lc-title">Elements of AI</span><span class="lc-desc">Nisi ut aliquip ex ea commodo consequat.</span></a>
+          <a class="link-card" href="https://mediemedveten.se/" target="_blank" rel="noopener"><span class="lc-title">Mediemedveten</span><span class="lc-desc">Duis aute irure dolor in reprehenderit</span></a>
+          <a class="link-card" href="https://theresanaiforthat.com/" target="_blank" rel="noopener"><span class="lc-title">There's An AI For That</span><span class="lc-desc">In voluptate velit esse cillum</span></a>
+          <a class="link-card" href="https://mickekring.se/" target="_blank" rel="noopener"><span class="lc-title">Micke Kring</span><span class="lc-desc">Dolore eu fugiat nulla pariatur</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="part-foot"><a class="to-top" href="#top">↑ Tillbaka till toppen</a></div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════ SIDFOT ═══════════════ -->
+<footer class="site-foot" id="kontakt">
+  <div class="foot-grid">
+    <div>
+      <div class="foot-brand"><span class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg></span>AI Folkbildaren</div>
+      <p>AI i folkbibliotekets praktik – en utbildningsserie i tre delar.</p>
+    </div>
+    <div>
+      <h3>Sidor</h3>
+      <ul class="foot-links">
+        <li><a href="#om">Om kursen</a></li>
+        <li><a href="#del1">Del 1</a></li>
+        <li><a href="#del2">Del 2</a></li>
+        <li><a href="#del3">Del 3</a></li>
+        <li><a href="#bonus">Bonus</a></li>
+        <li><a href="#resurser">Resurser</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Kontakt</h3>
+      <ul class="foot-links">
+        <li><a href="mailto:vidar.kjerstadius@gmail.com">vidar.kjerstadius@gmail.com</a></li>
+        <li><a href="https://www.linkedin.com/in/vidar-kjerstadius-09a747255/" target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=61569294428546" target="_blank" rel="noopener">Facebook</a></li>
+        <li><a href="https://www.aifolkbildaren.se" target="_blank" rel="noopener">aifolkbildaren.se</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-small">
+    <p>© 2026 Vidar Kjerstadius, AI-Folkbildaren. Allt innehåll är upphovsrättsskyddat och får bara användas inom organisationer som köpt in utbildningen. Affischerna får spridas fritt under <a href="https://creativecommons.org/licenses/by/4.0/deed.sv" target="_blank" rel="noopener">CC BY 4.0</a>.</p>
+    <p>AI i folkbibliotekets praktik · AI Folkbildaren · <button type="button" class="link-btn" data-lock>Lås sidan igen</button></p>
+  </div>
+</footer>
+
+<dialog class="lightbox" id="lightbox" aria-label="Bild i större format">
+  <img src="" alt="">
+  <div class="lb-bar">
+    <a class="btn primary" data-lb-pdf href="#" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>Ladda ner PDF</a>
+    <a class="btn" data-lb-jpg href="#" download>Bild (JPG)</a>
+    <button class="btn" type="button" data-lb-close>Stäng</button>
+  </div>
+</dialog>
+
+<dialog class="medal-dialog" id="medal" aria-labelledby="medal-titel" aria-describedby="medal-text">
+  <div class="medal-card">
+    <div class="confetti" aria-hidden="true"></div>
+    <svg class="medal-art" viewBox="0 0 160 200" aria-hidden="true"><use href="#medalj"/></svg>
+    <span class="pill">Alla uppgifter klara · 100 %</span>
+    <h2 class="medal-title" id="medal-titel">Grattis!</h2>
+    <p id="medal-text">Du har gjort alla workshopövningar och hemuppgifter i <em>AI i folkbibliotekets praktik</em>. Som belöning får du medaljen <strong>Fullfjädrad AI-folkbildare</strong>. Du hittar den bredvid progressionen i menyn högst upp.</p>
+    <button class="btn primary" type="button" data-medal-close>Tack!</button>
+  </div>
+</dialog>
+
+<div class="demo-toast" role="status" aria-live="polite" hidden>Materialet ingår inte i demoversionen.</div>
+<script src="assets/js/main.js?v=demo1"></script>
+</body>
+</html>
