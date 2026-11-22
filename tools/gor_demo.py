@@ -48,8 +48,7 @@ KEEP_CLASSES = {
     "toc-num", "toc-title", "mat-kind", "mat-title", "mat-meta", "lc-title",
     "part-title", "part-num", "prompt-label", "callout-title", "tl-year",
     "stat-num", "bar-val", "kk-head", "kk-crit", "kk-tag", "k", "btn", "link-btn",
-    "to-top", "brand", "nav-progress", "gate-title", "gate-sound", "gate-error",
-    "gate-hint", "gate-terminal", "purpose", "bk-n", "bk-t", "book-spine",
+    "to-top", "brand", "nav-progress", "purpose", "bk-n", "bk-t", "book-spine",
     "icon-box", "skip-link", "sr-only", "bars-note-keep",
 }
 # Text i de här blir lorem även om en förälder annars skulle ha behållit den.
@@ -192,14 +191,13 @@ def pre_edits(html):
     html = must_sub(r'(<meta property="og:description" content=")[^"]*', r"\1Demoversion.", html)
     html = must_sub(r'(<meta property="og:title" content=")([^"]*)', r"\1\2 (demo)", html)
 
-    # Egna nycklar i localStorage så att demot inte krockar med originalsajten
-    # (båda ligger på samma domän, vidarru.github.io).
-    html = must_sub(r"localStorage\.getItem\('aifp-gate'\) === '[0-9a-f]+'",
-                    "localStorage.getItem('aifp-demo-gate') === '" + GATE_HASH[:12] + "'", html)
-
-    # Lösenordsrutan: tipsa om demolösenordet
-    html = must_sub(r'(<p class="gate-error" role="alert" hidden>)',
-                    '<p class="gate-hint">Demoversion · lösenord: <code>demo</code></p>\n        \\1', html)
+    # Ingen startsida med lösenord i demot: ta bort den, lås upp sidan direkt
+    # och ta bort knappen "Lås sidan igen" i sidfoten.
+    html = must_sub(r"\n    if \(localStorage\.getItem\('aifp-gate'\)[^\n]*", "", html)
+    html = must_sub(r"<!-- ═+ STARTSIDA MED LÖSENORD ═+ -->\n<div class=\"gate.*?\n</div>\n\n", "", html, flags=re.S)
+    html = must_sub(r" · <button type=\"button\" class=\"link-btn\" data-lock>Lås sidan igen</button>", "", html)
+    if "gate" in html:
+        sys.exit("Det finns kvar rester av startsidan med lösenord")
 
     # Inbäddade YouTube-inspelningar → demovideon
     html = must_sub(r'<div class="video" data-yt="[^"]+">', f'<div class="video" data-src="{VIDEO}">', html)
@@ -239,10 +237,6 @@ def post_edits(html):
     html = html.replace('href="assets/css/style.css?v=3"', 'href="assets/css/style.css?v=demo1"')
     html = html.replace('src="assets/js/main.js?v=3"', 'src="assets/js/main.js?v=demo1"')
     return html
-
-
-import hashlib
-GATE_HASH = hashlib.sha256(b"demo").hexdigest()
 
 
 def main():
